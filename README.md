@@ -10,7 +10,7 @@ The code is developed in R version 4.3.0 (2023-04-21 ucrt)
 
 The proposed workflow can be divided in four phases: 
 1. image selection and pixel labelling
-     -    1.1 [brightness and contrast extraction](Phase_1.1.md)
+     -    1.1 [brightness and contrast extraction](Phase_1_1.md)
      -    1.2 images selection based on brightness and contrast
      -    1.3 image labelling
 2. Selection of downscaling factor and window size and feature computation
