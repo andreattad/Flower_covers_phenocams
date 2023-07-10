@@ -46,6 +46,7 @@ dir.create("Phase_4_FCTS_plots")
 ```
 
 ## 3. Install the required R packages
+
 ```
 packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
               "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
@@ -57,7 +58,16 @@ lapply(packages, function(package) {
   if (!require(package, character.only = TRUE)) {
     install.packages(package)
     library(package, character.only = TRUE)
-  }
-})
 ```
 
+<details>
+  <summary>questoquise vuoi aprire</summary>
+cose scritte dentro
+</details>
+
+  }
+})
+
+```
+</details>
+e questo me lo scrivi
