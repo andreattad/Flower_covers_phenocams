@@ -6,6 +6,8 @@
 In this tutorial you will derive single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands. 
 The code is developed in R version 4.3.0 (2023-04-21 ucrt)
 
+![Structure of the proposed workflow (Figure 2 in the manuscript)](Figure_2.png)
+
 The proposed workflow can be divided in four phases: 
 1. image selection and pixel labelling
      -    1.1 brightness and contrast extraction
@@ -21,9 +23,6 @@ The proposed workflow can be divided in four phases:
      -    4.1 FCTS extraction
      -    4.2 FCTS smoothing and display
      -    4.3 Phenological metric extraction
-
-![Structure of the proposed workflow (Figure 2 in the manuscript)](Figure_2.png)
-
 
 to get ready for the tutorial:
 
