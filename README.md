@@ -52,7 +52,6 @@ packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplo
               "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
               "lattice", "phenopix", "randomForest", "raster", "readr", "reshape2",
               "rgdal", "sp", "stringr", "terra", "tidyr", "varSel", "zoo")
-
 # Load or install missing packages
 lapply(packages, function(package) {
   if (!require(package, character.only = TRUE)) {
