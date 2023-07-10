@@ -12,7 +12,7 @@ to get ready for the tutorial:
 the materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE
 materials include: Images, Region of interests and labels. Download them in "your/folder/path"
 
-## 2.Set up the working environment. 
+## 2. Set up the working environment. 
 
 ```
 setwd("your/folder/path")
@@ -27,7 +27,7 @@ dir.create("Phase_4_FCTS")
 dir.create("Phase_4_FCTS_plots")
 ```
 
-## 3.  Install the required R packages
+## 3. Install the required R packages
 ```
 packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
               "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
