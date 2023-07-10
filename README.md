@@ -58,16 +58,11 @@ lapply(packages, function(package) {
   if (!require(package, character.only = TRUE)) {
     install.packages(package)
     library(package, character.only = TRUE)
-```
-
-<details>
-  <summary>questoquise vuoi aprire</summary>
-cose scritte dentro
-</details>
-
   }
 })
 
 ```
+<details>
+  <summary>questoquise vuoi aprire</summary>
+cose scritte dentro
 </details>
-e questo me lo scrivi
