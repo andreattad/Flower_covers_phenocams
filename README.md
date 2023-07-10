@@ -8,19 +8,19 @@ The code is developed in R version 4.3.0 (2023-04-21 ucrt)
 
 The proposed workflow can be divided in four phases: 
 1. image selection and pixel labelling
--    1.1 brightness and contrast extraction
--    1.2 images selection based on brightness and contrast
--    1.3 image labelling
+     -    1.1 brightness and contrast extraction
+     -    1.2 images selection based on brightness and contrast
+     -    1.3 image labelling
 2. Selection of df and ws and feature computation
--    2.1 feature values extraction
--    2.2 model comparison
+     -    2.1 feature values extraction
+     -    2.2 model comparison
 3. feature selection and final classifier compilation
--    3.1 feature selection and models comparison
--    3.2 processing time calculation
+     -    3.1 feature selection and models comparison
+     -    3.2 processing time calculation
 4. FCTS extraction, smoothing and calculation of phenological metrics.
--    4.1 FCTS extraction
--    4.2 FCTS smoothing and display
--    4.3 Phenological metric extraction
+     -    4.1 FCTS extraction
+     -    4.2 FCTS smoothing and display
+     -    4.3 Phenological metric extraction
 
 ![Structure of the proposed workflow (Figure 2 in the manuscript)](Figure_2.png)
 
