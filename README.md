@@ -12,26 +12,7 @@ to get ready for the tutorial:
 the materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE
 materials include: Images, Region of interests and labels. Download them in "your/folder/path"
 
-## 2. Install the required R packages
-
-```
-
-packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
-              "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
-              "lattice", "phenopix", "randomForest", "raster", "readr", "reshape2",
-              "rgdal", "sp", "stringr", "terra", "tidyr", "varSel", "zoo")
-
-# Load or install missing packages
-lapply(packages, function(package) {
-  if (!require(package, character.only = TRUE)) {
-    install.packages(package)
-    library(package, character.only = TRUE)
-  }
-})
-
-```
-
-## 3. Set up the working environment. 
+## 2.Set up the working environment. 
 
 ```
 setwd("your/folder/path")
@@ -44,5 +25,20 @@ dir.create("Phase_4_2014_filtered_indices_GCC")
 dir.create("Phase_4_Classified_images_for_Fig_5")
 dir.create("Phase_4_FCTS")
 dir.create("Phase_4_FCTS_plots")
+```
 
+## 3.  Install the required R packages
+```
+packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
+              "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
+              "lattice", "phenopix", "randomForest", "raster", "readr", "reshape2",
+              "rgdal", "sp", "stringr", "terra", "tidyr", "varSel", "zoo")
+
+# Load or install missing packages
+lapply(packages, function(package) {
+  if (!require(package, character.only = TRUE)) {
+    install.packages(package)
+    library(package, character.only = TRUE)
+  }
+})
 ```
