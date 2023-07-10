@@ -1,5 +1,5 @@
 
-##**TUTORIAL for the manuscript "Extracting single species flowering phenology from grassland species mixtures using time-lapse cameras"**
+# **TUTORIAL for the manuscript "Extracting single species flowering phenology from grassland species mixtures using time-lapse cameras"**
  by D.Andreatta, V. Klaus, C. Bachofen, M. Dalponte, N.Buchmann.  
  submitted to Remote Sensing of Environment
 
@@ -12,11 +12,11 @@ to get ready for the tutorial:
 
 
 
-# 1. Download the materials:
+## 1. Download the materials:
 the materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE
 materials include: Images, Region of interests and labels. Download them in "your/folder/path"
 
-# 2. Install the required R packages
+## 2. Install the required R packages
 
 ```
 
@@ -35,7 +35,7 @@ lapply(packages, function(package) {
 
 ```
 
-# 3. Set up the working environment. 
+## 3. Set up the working environment. 
 
 ```
 setwd("your/folder/path")
