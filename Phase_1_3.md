@@ -65,14 +65,14 @@ buffer<-100
 classes <- c("Soil", "Green_vegetation", "Kna_arv_flower", "Ran_acr_flower", "Leu_vul_flower", "Gra_flower")
 ####  2) select one class (e.g, Soil)
 class<-classes[1]
-####  3) run line 73
-####  4) click on some Soil pixels in the window (if there are some), then press esc. A dataframe with coordinates, image name and label will be saved as a ".csv" file 
+####  3) run line 76, an image will appear in the plot pane.
+####  4) click on some pixels of the class selected in point 2) (e.g., Soil)(if there are some), then press esc. A dataframe with coordinates, image name and label will be saved as a ".csv" file.
 ####  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane. Repeat point 4) and 5) until all the images have been labelled
-####  6) when you will have put some Soil labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled on all images.  
+####  6) when you will have put some labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled.  
 ####  NB: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100 %
    
 
-####---------------------
+####--------------------- RUN HERE
 {
    if(!exists("i")) {i <- 1} else {i<-i+1};  print(paste0("i=",i,"class=",class))
     img<-zoiCx<-zoiCy<-NULL
