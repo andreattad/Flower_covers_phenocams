@@ -5,12 +5,12 @@ Image labelling phase includes: i) preparation of the list of images to be label
 To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
 ```
 library(stringr)
-####---------------1)PREPARE THE LIST OF IMAGES TO BE SAMPLED----------------###
+####---------------1)PREPARE THE LIST OF IMAGES TO BE LABELLED----------------###
 setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
 list<-list.files(pattern="filt")
 blocks<-c(rep("A",28),rep("B",31),rep("C",30))#should be 31,31,30 but I removed plot 20,27,33, all in block A
 
-####CREATE A LIST OF ALL THE FILTERED IMAGES###
+#### CREATE A LIST OF ALL THE FILTERED IMAGES ###
 for (i in 1:length(list)){
   plot<-substr(list[i],12,14)
   block<-blocks[i]
