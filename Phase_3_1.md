@@ -1,4 +1,8 @@
 # 3.1 Feature selection and models comparison
+In Phase 3, we selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. Decreasing the number of features typically increases the classifier generalisation capability, because it avoids overfitting (Ho, 1995). First, we randomly assigned 70% of images for training, and 30% of images for validation. Validating a classifier on a separate part of the dataset is a common technique used to evaluate the performance of the classifier and avoid overfitting. For the feature selection, we used the training dataset and applied the “varSelSFFS” function from the “varSel” package, which performs feature selection using the Sequential Forward Floating Selection search strategy and the Jeffries-Matusita distance (Dalponte & Ørka, 2021). The Jeffries-Matusita distance saturates at square root of two, when including a new feature does not increase class separation. Thus, the number of features to select was defined according to the saturation, as described in Richards & Jia (2022). In addition, we investigated the capability of RGB bands, vegetation indices, and texture metrics to distinguish between classes. Specifically, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
+
+
+
 ```r
 library(randomForest)
 library(crfsuite)
