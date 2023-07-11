@@ -1,4 +1,4 @@
-# Feature selection and models comparison
+# 3.1 Feature selection and models comparison
 ```r
 library(randomForest)
 library(crfsuite)
