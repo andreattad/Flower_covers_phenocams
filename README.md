@@ -14,7 +14,7 @@ The proposed workflow can be divided in four phases:
      -    1.1 [brightness and contrast extraction](Phase_1_1.md)
      -    1.2 [images selection based on brightness and contrast](Phase_1_2.md)
      -    1.3 [image labelling](Phase_1_3.md)
-2. Selection of downscaling factor and window size and feature computation
+2. selection of downscaling factor and window size and feature computation
      -    2.1 [feature values extraction](Phase_2_1.md)
      -    2.2 [model comparison](Phase_2_2.md)
 3. feature selection and final classifier compilation
