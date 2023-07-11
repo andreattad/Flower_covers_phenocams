@@ -1,5 +1,5 @@
 # Image labelling
-Image labelling phase includes: i) preparation of the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another 
+Image labelling phase includes: i) preparation of the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another. The labelled dataset is provided in the ETH repository (see README file for details) for replicability.
 
 ## Image list preparation
 To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
@@ -9,7 +9,8 @@ library(stringr)
 setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
 list<-list.files(pattern="filt")
 blocks<-c(rep("A",28),rep("B",31),rep("C",30))#should be 31,31,30 but I removed plot 20,27,33, all in block A
-####CREATE LIST OF ALL THE FILTERED IMAGES###
+
+####CREATE A LIST OF ALL THE FILTERED IMAGES###
 for (i in 1:length(list)){
   plot<-substr(list[i],12,14)
   block<-blocks[i]
@@ -22,7 +23,7 @@ for (i in 1:length(list)){
 imlistpath<-paste0("your/folder/path/IMGS_2014/",substr(imlist,8,10),"/",imlist)
 imlistpath[1]
 
-
+#### SAMPLE 60,60 and 180 images in the first, second and third periods, rispectively.###
 set.seed(1536)
 listperiod1<-sample( grep("_20140424|_20140425|_20140426|_20140427|_20140428|_20140429|_20140430|_20140501
         |_20140502|_20140503|_20140504|_20140505", imlistpath,value=T), 60);set.seed(1536)
@@ -52,40 +53,36 @@ library(raster)
 library(rgdal)
 rm(list=ls());
 
-#loadimagelist and create seeds list that you will use to select a random 200X200 detail in the image
+# load the image list and create seeds list that you will use to select a random 200X200 detail in the image
 imgslist<-read.csv(file = "your/folder/path/Phase_1_imgslist300.csv",
                       row.names=1)[,1]
-imgslist
 set.seed(1002); seedsx<-sample(1:2^15,300)
 set.seed(1056); seedsy<-sample(1:2^15,300)
 buffer<-100
-dev.off()
-
-
-####-----now define the classes and create a directory for each class--------------------###
-classes <- c("Soil", "Green_vegetation", "Kna_arv_flower", "Ran_acr_flower", "Leu_vul_flower", "Gra_flower")
-
 
 ####  LABEL PIXEL OF CLASS SOIL IN THE PICTURES
-####  1) run line 99
-####  2) click the soil pixel in the window
-####  3) press Ctrl+Alt+T to run the section again, until you labelled all the pictures
-class<-classes[6]
+####  1) define the classes
+classes <- c("Soil", "Green_vegetation", "Kna_arv_flower", "Ran_acr_flower", "Leu_vul_flower", "Gra_flower")
+####  2) select one class (e.g, Soil)
+class<-classes[1]
+####  3) run line 73
+####  4) click on some Soil pixels in the window (if there are some), then press esc. A dataframe with coordinates, image name and label will be saved as a ".csv" file 
+####  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane. Repeat point 4) and 5) until all the images have been labelled
+####  6) when you will have put some Soil labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled on all images.  
+####  NB: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100 %
+   
 
 ####---------------------
 {
    if(!exists("i")) {i <- 1} else {i<-i+1};  print(paste0("i=",i,"class=",class))
     img<-zoiCx<-zoiCy<-NULL
    img<-brick(imgslist[i])
-   #define the center of the detail region you will sample based on random sample
-   #we don't want to be label image edges to avoid NA values of features when downscaling and computing texture metrics
    set.seed(seedsx[i]);  zoiCx<-sample(200:1080,1);
    set.seed(seedsy[i]);  zoiCy<-sample(200:840,1)
    imgc <- crop(img, extent(zoiCx-buffer,zoiCx+buffer,zoiCy-buffer,zoiCy+buffer))
    par(xaxt = "n",yaxt = "n",mar=c(0,0,0,0),oma=c(0,0,0,0))
    plotRGB(imgc,axes = F)
    labelled<-NULL
-   #NB1: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100
    labelled<-data.frame(locator(type="p",pch=16,col="red"))
    if(nrow(labelled)>0) { 
       labelled$type<-class; labelled$im<-imgslist[i];labelled$zoiCx<-zoiCx;labelled$zoiCy<-zoiCy
@@ -95,8 +92,8 @@ class<-classes[6]
 
 ```
 
-## Remove too close pixels
-To prevent duplicated pixels after downscaling the images (refer to the subsequent section for downscaling details), any labelled pixels that were within a distance of 8 pixels from one another were eliminated from the dataset. The labelling phase resulted in a table where the class and pixel coordinates were stored.
+## Remove close pixels
+To prevent duplicated pixels after downscaling the images, any labelled pixels that were within a distance of 8 pixels from one another were eliminated from the dataset. The labelling phase resulted in a table where the class and pixel coordinates were stored.
 ```
 library(raster)
 library(sp)
@@ -124,7 +121,7 @@ for(i in 1:length(images_ids)){
    if(!exists("ProxFiltered_tot")) {ProxFiltered_tot <- ProxFiltered} else {
       ProxFiltered_tot<-rbind(ProxFiltered_tot,ProxFiltered)};  
  }
-write.csv(ProxFiltered_tot,"your/folder/path/1_labelled.csv")
+write.csv(ProxFiltered_tot,"your/folder/path/Phase_1_labelled.csv")
 ```
 
 
