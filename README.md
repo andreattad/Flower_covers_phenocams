@@ -4,7 +4,7 @@
  submitted to Remote Sensing of Environment
  Contact: davide.andreatta@phd.unipd.it
 
-In this tutorial you will derive single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands. 
+In this tutorial you will derive single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany). 
 The code is developed in R version 4.3.0 (2023-04-21 ucrt)
 
 ![Structure of the proposed workflow (Figure 2 in the manuscript)](Figure_2.png)
@@ -29,7 +29,7 @@ to get ready for the tutorial:
 
 ## 1. Download the materials:
 the materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE
-materials include: Images, Region of interests and labels. Download them in "your/folder/path"
+materials include: Images, Region of interests and labels.
 
 ## 2. Set up the working environment. 
 
@@ -62,7 +62,3 @@ lapply(packages, function(package) {
 })
 
 ```
-<details>
-  <summary>questoquise vuoi aprire</summary>
-cose scritte dentro
-</details>
