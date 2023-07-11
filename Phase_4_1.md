@@ -1,4 +1,4 @@
-# 4.1 Flower cover extraction
+# 4.1 Flower covers extraction
 Once the final RF classifier had been trained, the percentage of pixels in each class was computed for each image. For this, images were selected from the series (see section 2.3.1), for each image the selected features were computed, and percentages of each class within each image was calculated using the RF classifier developed in subsection 2.3.3. 
 
 ```r
@@ -36,7 +36,7 @@ plotlist<-c(
 )
 blocklist<- c(rep("A",31), rep("B",31) ,rep("C",30))
 blockplotlist<-paste(blocklist,plotlist,sep="")
-blockplotlist<-blockplotlist[! blockplotlist %in% c("A020",'A033',"A027")] #REMOVED 033 since it does not have a list
+blockplotlist<-blockplotlist[! blockplotlist %in% c("A020",'A033',"A027")] #REMOVED plots in which image acquisition failed.
 
 ###-------------------------------------------------------------
 ###          3) extract a flower cover time series for each plot
@@ -64,6 +64,7 @@ for (bp in blockplotlist){
         img<-brick(imlist[i])
           load(paste("your/folder/path/ROISREFS_2014/",block,"/",plot,"/ROI/roi.data.Rdata",sep=""))          
           imgr <- terra::aggregate(img, df)
+          #NB: here compute only the "best Bands selected in SFFS" in our case: rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
           imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
           imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
           imgr[[6]]<-(imgr[[2]]-imgr[[1]])/(imgr[[2]]+imgr[[1]]-imgr[[3]])#VARI
@@ -94,17 +95,16 @@ for (bp in blockplotlist){
           vals0<-summary(as.factor(classified@data@values))
           notNAcount<-sum(subset(vals0,!names(vals0)=="NA's"))
           rf[["classes"]]
-          datafs[i,"Gra_flower"]<-if(length(subset(vals0,names(vals0)=="1"))>0){subset(vals0,names(vals0)=="1")/notNAcount}else{NA}
-          datafs[i,"Green_vegetation"]<-if(length(subset(vals0,names(vals0)=="2"))>0){subset(vals0,names(vals0)=="2")/notNAcount}else{NA}
-          datafs[i,"Kna_arv_flower"]<-if(length(subset(vals0,names(vals0)=="3"))>0){subset(vals0,names(vals0)=="3")/notNAcount}else{NA}
-          datafs[i,"Leu_vul_flower"]<-if(length(subset(vals0,names(vals0)=="4"))>0){subset(vals0,names(vals0)=="4")/notNAcount}else{NA}
-          datafs[i,"Ran_acr_flower" ]<-if(length(subset(vals0,names(vals0)=="5"))>0){subset(vals0,names(vals0)=="5")/notNAcount}else{NA}
-          datafs[i,"Soil" ]<-if(length(subset(vals0,names(vals0)=="6"))>0){subset(vals0,names(vals0)=="6")/notNAcount}else{NA}
+          datafs[i, rf[["classes"]][1]]<-if(length(subset(vals0,names(vals0)=="1"))>0){subset(vals0,names(vals0)=="1")/notNAcount}else{NA}
+          datafs[i,rf[["classes"]][2]]<-if(length(subset(vals0,names(vals0)=="2"))>0){subset(vals0,names(vals0)=="2")/notNAcount}else{NA}
+          datafs[i,rf[["classes"]][3]]<-if(length(subset(vals0,names(vals0)=="3"))>0){subset(vals0,names(vals0)=="3")/notNAcount}else{NA}
+          datafs[i,rf[["classes"]][4]]<-if(length(subset(vals0,names(vals0)=="4"))>0){subset(vals0,names(vals0)=="4")/notNAcount}else{NA}
+          datafs[i,rf[["classes"]][5]]<-if(length(subset(vals0,names(vals0)=="5"))>0){subset(vals0,names(vals0)=="5")/notNAcount}else{NA}
+          datafs[i,rf[["classes"]][6] ]<-if(length(subset(vals0,names(vals0)=="6"))>0){subset(vals0,names(vals0)=="6")/notNAcount}else{NA}
           time1 <- proc.time()[3]
           duration <- time1-time0
           print(duration)
       }
-   datafs$ftot<- datafs$Gra_flower+datafs$Kna_arv_flower+datafs$Leu_vul_flower+datafs$Ran_acr_flower
         time1.all <- proc.time()[3];    duration.all <- time1.all-time0.all
         write.csv(datafs,file = paste("your/folder/path/Phase_4_FCTS/dataflowers",plot,".csv",sep=""))
     }
