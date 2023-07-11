@@ -1,7 +1,8 @@
 
-# **TUTORIAL for the manuscript "Extracting single species flowering phenology from grassland species mixtures using time-lapse cameras"**
+# **Tutorial for the manuscript "Extracting single species flowering phenology from grassland species mixtures using time-lapse cameras"**
  by D.Andreatta, V. Klaus, C. Bachofen, M. Dalponte, N.Buchmann.  
  submitted to Remote Sensing of Environment
+ Contact: davide.andreatta@phd.unipd.it
 
 In this tutorial you will derive single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands. 
 The code is developed in R version 4.3.0 (2023-04-21 ucrt)
