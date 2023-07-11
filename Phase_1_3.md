@@ -1,9 +1,9 @@
-# Image labelling
+# 1.3 Image labelling
 Image labelling phase includes: i) preparation of the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another. The labelled dataset is provided in the ETH repository (see README file for details) for replicability.
 
 ## Image list preparation
 To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
-```
+```r
 library(stringr)
 ####---------------1)PREPARE THE LIST OF IMAGES TO BE LABELLED----------------###
 setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
@@ -47,7 +47,7 @@ write.csv(longunsorted,file = "your/folder/path/Phase_1_imgslist300.csv")
 ## Images patches  labelling
 For each image, a 200 pixels × 200 pixels image patch was randomly selected and plotted in RGB colours using the “plotRGB()” function of the “raster” package (Hijmans, 2022). Around 30 pixels per image were labelled by clicking on the image to retrieve the x and y coordinates using the “locator()” function of the “graphics” package and assigning to each pixel the class to which it belongs (see subsection 2.1). 
 
-```
+```r
 
 library(raster)
 library(rgdal)
@@ -94,7 +94,7 @@ class<-classes[1]
 
 ## Remove close pixels
 To prevent duplicated pixels after downscaling the images, any labelled pixels that were within a distance of 8 pixels from one another were eliminated from the dataset. The labelling phase resulted in a table where the class and pixel coordinates were stored.
-```
+```r
 library(raster)
 library(sp)
 # combine all data frames into a single data frame
@@ -123,10 +123,3 @@ for(i in 1:length(images_ids)){
  }
 write.csv(ProxFiltered_tot,"your/folder/path/Phase_1_labelled.csv")
 ```
-
-
-
-
-
-
-
