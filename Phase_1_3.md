@@ -1,9 +1,10 @@
 # Image labelling
-Image labelling phase includes: i) prepare the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another 
+Image labelling phase includes: i) preparation of the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another 
 
 ## Image list preparation
 To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
 ```
+library(stringr)
 ####---------------1)PREPARE THE LIST OF IMAGES TO BE SAMPLED----------------###
 setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
 list<-list.files(pattern="filt")
@@ -37,7 +38,8 @@ longunsorted<-sample(longsortedlist,c(60+60+180))
 longunsorted[length(longunsorted)]
 
 file.copy(longunsorted,
-          paste0("your/folder/path/Phase_1_check_sel_imgs/",substr(longunsorted,80,120))
+          paste0("C:/Users/david/Documents/dottorato 2020/estero/JENA_2014_MAT_RES/Phase_1_check_sel_imgs/",
+                 sapply(longunsorted, function(x) str_extract(x, "(SiteJE\\w+)")))
           )
 write.csv(longunsorted,file = "your/folder/path/Phase_1_imgslist300.csv")
 ```
