@@ -5,7 +5,7 @@ Directory structure in the "your/path/folder/ROISREFS_2014" is compatible with t
 
 In this script, our aim is to extract brightness average and contrast for each image.
 
-```
+```r
 library(phenopix)
 #####----------------------------------------------------------------------###
 #####----------- 1) create list of paths to images in subfolders ----------###
