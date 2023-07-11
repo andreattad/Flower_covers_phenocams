@@ -1,7 +1,7 @@
 # 1.2 Images selection based on brightness and contrast
 Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile within a 3-day window. The selection of the best images within this 3-day window avoided including images taken on days with sub-optimal observations (e.g., all foggy/high contrast images).
 
-```
+```r
 #####----------- CREATE LIST OF BLOCKS AND PLOTS ----------###
 plotlist<-c(
    c("001", "002", "003", "005", "007", "008", "009", "010", "011", "013", "016", "017", "018", "020", "021", "024", "025", "026", "027", "028", "030", "033", "035", "037", "039", "040", "042", "043", "044" ,"045", "046"),
