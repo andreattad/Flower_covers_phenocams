@@ -1,9 +1,7 @@
 # 3.2 Processing time calculation
-
-
-
-
-
+The feature combination providing the best trade-off between accuracy and processing time was selected for the RF final classifier compilation.
+We calculated the processing time for the calculation of all features and subsequent image classification for one image.
+The durations were reported in "your/folder/path/Phase_3_RF_classifiers_accuracies.csv"
 
 ```r
 library(randomForest)
@@ -161,6 +159,8 @@ classifier_RF<-readRDS("your/folder/path/Phase_3_RF_classifiers/RF_all.rds")
       time0 <- proc.time()[3]
       imgr<-brick("your/folder/path/IMGS_2014/010/SiteJEA010_201404121334.jpg")
       imgr <- terra::aggregate(imgr, df)
+
+      #NB: here compute only the "best Bands selected in SFFS" in our case: rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
       imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
       imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
       imgr[[6]]<-(imgr[[2]]-imgr[[1]])/(imgr[[2]]+imgr[[1]]-imgr[[3]])#VARI
@@ -193,9 +193,4 @@ classifier_RF<-readRDS("your/folder/path/Phase_3_RF_classifiers/RF_all.rds")
       print(duration)
       row.names(classifier_RF[["importance"]])
       write.csv(summary,file="your/folder/path/Phase_3_RF_classifiers_accuracies.csv")
-      dev.off()
-      par(mfrow=c(2,1))
-      text(x=barplot(summary$f1, names.arg = summary$name_test),y=0.2, label=round(summary$f1,3),adj=c(0.5,1))
-      text(x=barplot(summary$durations, names.arg = summary$name_test),y=3, label=round(summary$durations),adj=c(0.5,1))
-      
       ```
