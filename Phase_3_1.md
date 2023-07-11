@@ -1,7 +1,8 @@
 # 3.1 Feature selection and models comparison
-In Phase 3, we selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. Decreasing the number of features typically increases the classifier generalisation capability, because it avoids overfitting (Ho, 1995). First, we randomly assigned 70% of images for training, and 30% of images for validation. Validating a classifier on a separate part of the dataset is a common technique used to evaluate the performance of the classifier and avoid overfitting. For the feature selection, we used the training dataset and applied the “varSelSFFS” function from the “varSel” package, which performs feature selection using the Sequential Forward Floating Selection search strategy and the Jeffries-Matusita distance (Dalponte & Ørka, 2021). The Jeffries-Matusita distance saturates at square root of two, when including a new feature does not increase class separation. Thus, the number of features to select was defined according to the saturation, as described in Richards & Jia (2022). In addition, we investigated the capability of RGB bands, vegetation indices, and texture metrics to distinguish between classes. Specifically, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
+We selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. 
+First, we randomly assigned 70% of images for training, and 30% of images for validation. Then, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
 
-
+The classifiers are saved in "your/folder/path/Phase_3_RF_classifiers/" and accuracies are saved in "your/folder/path/Phase_3_RF_classifiers_accuracies.csv"
 
 ```r
 library(randomForest)
@@ -17,6 +18,7 @@ summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
 # ------------------------------------------------------------
 # 0 PREPARE THE TRAINING AND TESTING DATASETS
 #------------------------------------------------------------
+# Load the labelled and sampled points calculated using the best downscaling factor - window size combinations, as resulted from phase 2.2
 df<-read.csv(file = "your/folder/path/Phase_2_df_ws_ext_feat/Phase2_df4_ws11.csv",row.names=1 )
 df$type<-as.factor(df$type)
 df$vari[df$vari==Inf]<-max(df$vari[is.finite(df$vari)])
@@ -145,7 +147,7 @@ print(table(pred_rf_SELB, test$type))
  summary[summary$name_test=="sel","bands_used"]<-paste0("'",paste( bestBands,collapse="','"),"'")
  summary[summary$name_test=="sel","f1"]<-metrics[["overall"]][["f1_mean"]]
 
-  ###--------------------6---PLOT ALL BANDS
+  ###--------------------SAVE AND PLOT THE RESULTS
  write.csv(summary,"your/folder/path/Phase_3_RF_classifiers_accuracies.csv")
 
 summary <- summary[order(summary$f1,decreasing = FALSE),]
