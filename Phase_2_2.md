@@ -1,8 +1,8 @@
-# Model comparison
+# 2.2 Model comparison
 Here, we tested the influence of window size and downscaling factor on classification accuracy.
 We randomly assigned pixels from 70% of the images for training, and 30% for validation for each DF-WS combination, then we trained a random forest (RF) classifier using the “randomForest” function of the “randomForest” package (Liaw & Wiener, 2002). Accuracies were reported and saves as .csv file. 
 The metric to calculate the accuracy of the RF classifiers was the mean F1 score of the five classes. The F1 score is derived from precision and recall metrics. The precision is intuitively the ability of the classifier not to label a sampled pixel as positive when it is negative, whereas the recall is the ability of the classifier to find all the positive sampled pixels. Metrics equations are reported in the main text. 
-```
+```r
 library(randomForest)
 library(crfsuite)
 library(bigstatsr)
