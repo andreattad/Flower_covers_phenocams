@@ -6,7 +6,7 @@ Contact information: davide.andreatta@phd.unipd.it.
 In this tutorial you will derive single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany). 
 The code is developed in R version 4.3.0 (2023-04-21 ucrt).
 
-![Structure of the proposed workflow (Figure 2 in the manuscript)](https://drive.google.com/uc?id=1z9yc0Tht4S425txHhc42OpQdz4N7g6I6))
+![Structure of the proposed workflow (Figure 2 in the manuscript)](https://drive.google.com/uc?id=1z9yc0Tht4S425txHhc42OpQdz4N7g6I6 "Structure of the proposed workflow (Figure 2 in the manuscript)")
 
 The proposed workflow can be divided in four phases: 
 1. image selection and pixel labelling
