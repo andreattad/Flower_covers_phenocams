@@ -26,7 +26,8 @@ The proposed workflow can be divided in four phases:
      -    4.3 [Phenological metric extraction](Phase_4_3.md)
   
 Moreover, [here](image_classification.md) we provide the code to apply the classify all the images in the time-series and save the classified images 
-![Example of RGB and classified image from Figure 5 in the manuscript)](https://github.com/andreattad/Flower_covers_phenocams/blob/main/rgb_classified.png).
+![Example of RGB and classified image from Figure 5 in the manuscript](https://drive.google.com/uc?id=1tiGDnfG2r4wLzkZzLTrSEai95HHSFLbm)  
+*Example of RGB and classified image from Figure 5 in the manuscript*
 
 # To get ready for the tutorial:
 
