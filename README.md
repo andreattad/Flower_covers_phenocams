@@ -25,8 +25,8 @@ The proposed workflow can be divided in four phases:
      -    4.2 [FCTS smoothing and display](Phase_4_2.md)
      -    4.3 [Phenological metric extraction](Phase_4_3.md)
   
-Moreover, [here](image_classification.md) we provide the code to apply the classify all the images in the time-series and save the classified images 
-![Example of RGB and classified image from Figure 5 in the manuscript](https://drive.google.com/uc?id=1tiGDnfG2r4wLzkZzLTrSEai95HHSFLbm)  
+Moreover, [here](image_classification.md) we provide the code to classify all the images in a plot and save the classified images 
+![Example of RGB and classified image from Figure 5 in the manuscript](https://drive.google.com/uc?id=1NVcvDAzGoqVIJ4gtlL2xgXSbHAvd22ZY)  
 *Example of RGB and classified image from Figure 5 in the manuscript*
 
 # To get ready for the tutorial:
