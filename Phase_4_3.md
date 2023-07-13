@@ -50,8 +50,8 @@ findpm<-function(df){
    end<-dates[which(percentilesafterpeak>limitend)[1]]
    pm<-c(start,peak,end)
    if(max(vec)<0.01){pm<-NA}
-   if(vec[1]>(max(vec)/3)){pm[1]<-NA}
-   if(vec[length(vec)]>(max(vec)/3)){pm[3]<-NA}
+   if(vec[1]>.01){pm[1]<-NA}
+   if(vec[length(vec)]>.01){pm[3]<-NA}
    if(peak==max(dates)|peak==min(dates)){pm<-NA}
    return(pm)
 }
@@ -64,7 +64,7 @@ phenometrics<-merged_df%>%
              end = findpm(cur_data())[3])
 
 # Identify flowering phenological metric for FCTS of the sown species
-phenometrics_sown<-res%>%
+phenometrics_sown<-phenometrics%>%
    filter(accepted==T)
 summary(is.na(phenometrics_sown))
 ```
