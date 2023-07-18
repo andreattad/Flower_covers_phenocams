@@ -27,7 +27,7 @@ The proposed workflow can be divided in four phases:
   
 Moreover, [here](image_classification.md) we provide the code to classify all the images in a plot
 ![Example of RGB and classified image from Figure 5 in the manuscript](https://drive.google.com/uc?id=1NVcvDAzGoqVIJ4gtlL2xgXSbHAvd22ZY)  
-*Example of RGB and classified image from Figure 5 in the manuscript*
+*Example of RGB and classified image*
 
 # To get ready for the tutorial:
 
