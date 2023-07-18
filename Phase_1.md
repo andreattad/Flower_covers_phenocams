@@ -82,12 +82,15 @@ for (plot in 1:length(plotIDs)){
      #######------FIND IMAGES MATCHING BOTH CRITERIA-------####
      dataraw$selBRICON<-FALSE
      dataraw$selBRICON[dataraw$selBRI==T&dataraw$selCON==T]<-T
+     
+     #######------SAVE THE RESULTS-------####
+     block<-if (as.numeric(plot)<48){"A"}else if (as.numeric(plot)<93){"B"}else{"C"}
+     dataraw$imname<-paste0("SiteJE",block,plot,"_2014",substr(dataraw$date,6,7),#yearmonth
+                       substr(dataraw$date,9,10),substr(dataraw$date,12,13),#dayhour
+                       substr(dataraw$date,15,16),".jpg")#minute
      dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
-      
-count[b,2]<-nrow(dataraw)
-count[b,3]<-nrow(dataraw[dataraw$selSUM==2,])
- setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
- write.csv(dataraw,file = paste("rawdatafilt",plot,".csv",sep=""))
+     setwd("your/folder/path/Phase_1_2014_filtered_indices_BRI_CON/")
+     write.csv(dataraw,file = paste("rawdatafilt",plot,".csv",sep=""))
 }
 
 #######------write a summary csv-------####
