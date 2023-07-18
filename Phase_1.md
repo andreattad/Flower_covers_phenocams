@@ -130,7 +130,7 @@ list3periods_shuffled<-sample(list3periods,c(60+60+180))
 
 # Copy the 300 sampled images to a folder to inspect them
 file.copy(list3periods_shuffled,
-          paste0("C:/Users/david/Documents/dottorato 2020/estero/JENA_2014_MAT_RES/Phase_1_check_sel_imgs/",
+          paste0("your/folder/path/Phase_1_check_sel_imgs/",
                  sapply(list3periods_shuffled, function(x) str_extract(x, "(SiteJE\\w+)")))
 )
 
@@ -154,22 +154,22 @@ set.seed(1002); seedsx<-sample(1:2^15,300)
 set.seed(1056); seedsy<-sample(1:2^15,300)
 buffer<-100
 
-####  LABEL PIXEL OF CLASS SOIL IN THE PICTURES
-####  1) define the classes
+#  PIXEL LABELLING PROCEDURE
+#  1) define the classes
 classes <- c("Soil", "Green_vegetation", "Kna_arv_flower", "Ran_acr_flower", "Leu_vul_flower", "Gra_flower")
-####  2) select one class (e.g, Soil)
+#  2) select one class (e.g, Soil)
 class<-classes[1]
-####  3) run line 76, an image will appear in the plot pane.
-####  4) click on some pixels of the class selected in point 2) (e.g., Soil)(if there are some), then press esc. A dataframe with coordinates, image name and label will be saved as a ".csv" file.
-####  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane. Repeat point 4) and 5) until all the images have been labelled
-####  6) when you will have put some labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled.  
-####  NB: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100 %
+#  3) run the line below where "RUN HERE" is written, an image will appear in the plot pane.
+#  4) If there are some, click on some pixels of the class selected in point 2, (e.g., Soil), then press esc on the keyboard. A dataframe with coordinates, image name and label will be saved as a ".csv" file.
+#  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane. Repeat point 4) and 5) until all the images have been labelled
+#  6) when you will have put some labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled.  
+#  NB: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100 %
    
 
 ####--------------------- RUN HERE
 {
    if(!exists("i")) {i <- 1} else {i<-i+1};  print(paste0("i=",i,"class=",class))
-    img<-zoiCx<-zoiCy<-NULL
+   img<-zoiCx<-zoiCy<-NULL
    img<-brick(imgslist[i])
    set.seed(seedsx[i]);  zoiCx<-sample(200:1080,1);
    set.seed(seedsy[i]);  zoiCy<-sample(200:840,1)
@@ -178,11 +178,13 @@ class<-classes[1]
    plotRGB(imgc,axes = F)
    labelled<-NULL
    labelled<-data.frame(locator(type="p",pch=16,col="red"))
-   if(nrow(labelled)>0) { 
-      labelled$type<-class; labelled$im<-imgslist[i];labelled$zoiCx<-zoiCx;labelled$zoiCy<-zoiCy
-   write.csv(labelled,file=paste0("your/folder/path/Phase_1_lab_xy/",
-                                "lab_xy_pic_",sprintf("%03d", i),"class_",class,".csv"))}
-    }
+   if(nrow(labelled)>0) {
+                          labelled$type<-class;
+                          labelled$im<-imgslist[i];
+                          labelled$zoiCx<-zoiCx;
+                          labelled$zoiCy<-zoiCy
+                          write.csv(labelled,file=paste0("your/folder/path/Phase_1_lab_xy/","lab_xy_pic_",sprintf("%03d", i),"class_",class,".csv"))}
+                        }
 
 ```
 
@@ -191,31 +193,27 @@ To prevent duplicated pixels after downscaling the images, any labelled pixels t
 ```r
 library(raster)
 library(sp)
+maindir<-"your/folder/path/"
+setwd(maindir)
 # combine all data frames into a single data frame
-file_paths<-list.files(path="your/folder/path/Phase_1_lab_xy/",
-                       full.names=T,pattern=".csv")
+file_paths<-list.files(path="./Phase_1_lab_xy/",full.names=T,pattern=".csv")
 combined_df <- do.call(rbind, lapply(file_paths, read.csv,row.names=1)
-summary(factor(combined_df$type))
 images_ids<-unique(combined_df$im)
 minimum_distance<-8
 
-for(i in 1:length(images_ids)){
-   df<-combined_df[combined_df$im==images_ids[i],]
-   df$progressive<-1:nrow(df)
-   ProxFiltered<- df[1,]
-   for (j in 2:nrow(df  )){
+# for each image load a first point, and then add only points more than 8 pixels apart
+for(image in images_ids){
+   df<-combined_df[combined_df$im==image,]
+   ProxFiltered<- df[1,]   #at the first iteration only the first point is proximity filtered
+   for (point_index in 2:nrow(df  )){
       pts<- as.matrix(  ProxFiltered[,c("x","y")])
-       pt<-  as.numeric(df[j,c("x","y")])
+      pt<-  as.numeric(df[point_index,c("x","y")])
       dists<- spDistsN1(pts, pt, longlat = FALSE)
       exceed<- any(dists<minimum_distance)
-      if (exceed==FALSE){
-         ProxFiltered<-rbind(  ProxFiltered, df[j,])
-      }}
-
-   if(!exists("ProxFiltered_tot")) {ProxFiltered_tot <- ProxFiltered} else {
+      if (exceed==FALSE){ProxFiltered<-rbind(  ProxFiltered, df[point_index,])}}
+      if(!exists("ProxFiltered_tot")) {ProxFiltered_tot <- ProxFiltered} else {
       ProxFiltered_tot<-rbind(ProxFiltered_tot,ProxFiltered)};  
  }
-write.csv(ProxFiltered_tot,"your/folder/path/Phase_1_labelled.csv")
+# Save the labelled and proximity filtered dataset
+write.csv(ProxFiltered_tot,"./Phase_1_labelled.csv")
 ```
-
-
