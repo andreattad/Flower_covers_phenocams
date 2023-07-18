@@ -39,8 +39,6 @@ start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
 perc<-c(0.1,0.4)    #Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile in a 3-days window
 
-
-count<-data.frame(plotIDs=plotIDs,totN=NA,selectedN=NA)
 for (plot in 1:length(plotIDs)){
    dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/"VI_raw2014_", plot,".csv"),encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
@@ -79,22 +77,21 @@ for (plot in 1:length(plotIDs)){
     dataraw$selCON[match_con]<-TRUE
 
 
-     #######------FIND IMAGES MATCHING BOTH CRITERIA-------####
-     dataraw$selBRICON<-FALSE
-     dataraw$selBRICON[dataraw$selBRI==T&dataraw$selCON==T]<-T
+    #######------FIND IMAGES MATCHING BOTH CRITERIA-------####
+    dataraw$selBRICON<-FALSE
+    dataraw$selBRICON[dataraw$selBRI==T&dataraw$selCON==T]<-T
      
-     #######------SAVE THE RESULTS-------####
-     block<-if (as.numeric(plot)<48){"A"}else if (as.numeric(plot)<93){"B"}else{"C"}
-     dataraw$imname<-paste0("SiteJE",block,plot,"_2014",substr(dataraw$date,6,7),#yearmonth
-                       substr(dataraw$date,9,10),substr(dataraw$date,12,13),#dayhour
-                       substr(dataraw$date,15,16),".jpg")#minute
+    #######------SAVE THE RESULTS-------####
+    block<-if (as.numeric(plot)<48){"A"}else if (as.numeric(plot)<93){"B"}else{"C"}
+    dataraw$imname<-paste0("SiteJE",block,plot,"_2014",#year
+                                    substr(dataraw$date,6,7),#month
+                                    substr(dataraw$date,9,10),#day
+                                    substr(dataraw$date,12,13),#hour
+                                    substr(dataraw$date,15,16),".jpg")#minute
      dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
      setwd("your/folder/path/Phase_1_2014_filtered_indices_BRI_CON/")
      write.csv(dataraw,file = paste("rawdatafilt",plot,".csv",sep=""))
 }
-
-#######------write a summary csv-------####
-write.csv(count,file = "your/folder/path/Phase_1_Available_selected_images_per_plot.csv")
 
 ```
 
