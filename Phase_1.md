@@ -39,8 +39,8 @@ start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
 perc<-c(0.1,0.4)    #Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile in a 3-days window
 
-for (plot in 1:length(plotIDs)){
-   dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/"VI_raw2014_", plot,".csv"),encoding="UTF-8",row.names=1 )
+for (plot in 1:plotIDs){
+   dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/",VI_raw2014_", plot,".csv"),encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
    doys<-doys[doys>start&doys<end]
 
@@ -48,15 +48,15 @@ for (plot in 1:length(plotIDs)){
    for (i in 1:length(doys)){
         tab3daysbri<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
         tab3daysbri$percentiles<-ecdf(tab3daysbri$bri.av)(tab3daysbri$bri.av)
-        dates_selected_bri_i<-tab3daysbri[tab3daysbri$percentiles>perc[1]&tab3daysbri$percentiles<perc[2],])
+        dates_selected_bri_i<-tab3daysbri[tab3daysbri$percentiles>perc[1]&tab3daysbri$percentiles<perc[2],]
         if(i==1){dates_selected_bri_tot<-dates_selected_bri_i}else{
                  dates_selected_bri_tot<-rbind(dates_selected_bri_tot,dates_selected_bri_i)
-        }
+        }}
     # eliminate duplicated (some images may be selected more than once)
     dates_selected_bri_tot<-dates_selected_bri_tot[!duplicated(dates_selected_bri_tot$date), ]
     
     # add column selBRI in which images matching the criteria of selection for brightness are TRUE 
-    match_bri<-is.element(dataraw$date, dates_selectedtot$date)
+    match_bri<-is.element(dataraw$date, dates_selected_bri_tot$date)
     dataraw$selBRI<-FALSE
     dataraw$selBRI[match_bri]<-TRUE
 
@@ -64,10 +64,10 @@ for (plot in 1:length(plotIDs)){
     for (i in 1:length(doys)){
        tab3dayscon<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
        tab3dayscon$percentiles<-ecdf(tab3dayscon$bri.sd)(tab3dayscon$bri.sd)
-       dates_selected_con_i<-tab3dayscon[tab3dayscon$percentiles>perc[1]&tab3dayscon$percentiles<perc[2],])
+       dates_selected_con_i<-tab3dayscon[tab3dayscon$percentiles>perc[1]&tab3dayscon$percentiles<perc[2],]
         if(i==1){dates_selected_con_tot<-dates_selected_con_i}else{
                  dates_selected_con_tot<-rbind(dates_selected_con_tot,dates_selected_con_i)
-        }
+        }}
     # eliminate duplicated (some images may be selected more than once)
     dates_selected_con_tot<-dates_selected_con_tot[!duplicated(dates_selected_con_tot$date), ]
     
@@ -103,14 +103,13 @@ To develop a labelled dataset, 300 images were randomly selected (60 images in t
 ```r
 library(stringr)
 ####---------------1)PREPARE THE LIST OF IMAGES TO BE LABELLED----------------###
-setwd("your/folder/path/Phase_1_2014_filtered_indices_BRI_CON/")
-csv_name_list<-list.files(pattern="rawdatafilt")
+setwd("your/folder/path/")
+csv_name_list<-list.files(path="./Phase_1_2014_filtered_indices_BRI_CON/",pattern="rawdatafilt")
 
 #### CREATE A LIST OF ALL THE FILTERED IMAGES ###
 combined.df <- do.call(rbind , lapply(csv_name_list, read.csv, row.names = 1))
 imlist<-combined.df[combined.df$sel_BRICON==T,"imname"]
-imlistpath<-paste0("your/folder/path/IMGS_2014/",substr(imlist,8,10),"/",imlist)
-
+imlistpath<-paste0("./IMGS_2014/",substr(imlist,8,10),"/",imlist)
 
 #### SAMPLE 60,60 and 180 images in the first, second and third periods, rispectively.###
 set.seed(1536)
