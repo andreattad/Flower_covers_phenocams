@@ -23,7 +23,7 @@ for (plot in plotIDs) {
   print(duration)
 }
 
-# Convert from Rdata format to csv format and save all in the same folder
+# Convert from Rdata format to csv format and save all them in the same folder
 for (plot in plotIDs) {
   load(paste0("your/folder/path/ROISREFS_2014/", plot, "/VI/VI.data.Rdata"))
   path.csv <- "your/folder/path/Phase_1_2014_raw_indices/"
@@ -39,52 +39,51 @@ start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
 perc<-c(0.1,0.4)    #Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile in a 3-days window
 
-#######------FIND 0.1 to 0.4 percentile bri.av in 3 days window-------####
+
 count<-data.frame(plotIDs=plotIDs,totN=NA,selectedN=NA)
 for (plot in 1:length(plotIDs)){
    dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/"VI_raw2014_", plot,".csv"),encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
    doys<-doys[doys>start&doys<end]
+
+   #######------FIND IMAGES MATCHING BRIGHTNESS CRITERIA-------####
    for (i in 1:length(doys)){
-        tab3days<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
-        tab3days$percentiles<-ecdf(tab3days$bri.av)(tab3days$bri.av)
-        dates_selectedi<-tab3days[tab3days$percentiles>perc[1]&tab3days$percentiles<perc[2],])
-        if(i==1){dates_selectedtot<-dates_selectedi}else{
-                 dates_selectedtot<-rbind(dates_selectedtot,dates_selectedi)
+        tab3daysbri<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
+        tab3daysbri$percentiles<-ecdf(tab3daysbri$bri.av)(tab3daysbri$bri.av)
+        dates_selected_bri_i<-tab3daysbri[tab3daysbri$percentiles>perc[1]&tab3daysbri$percentiles<perc[2],])
+        if(i==1){dates_selected_bri_tot<-dates_selected_bri_i}else{
+                 dates_selected_bri_tot<-rbind(dates_selected_bri_tot,dates_selected_bri_i)
         }
-# eliminate duplicated
-dates_selectedtot<-dates_selectedtot[!duplicated(dates_selectedtot$date), ]
+    # eliminate duplicated (some images may be selected more than once)
+    dates_selected_bri_tot<-dates_selected_bri_tot[!duplicated(dates_selected_bri_tot$date), ]
+    
+    # add column selBRI in which images matching the criteria of selection for brightness are TRUE 
+    match_bri<-is.element(dataraw$date, dates_selectedtot$date)
+    dataraw$selBRI<-FALSE
+    dataraw$selBRI[match_bri]<-TRUE
 
-# add column selBRI in which images matching the criteria of selection for brightness are TRUE 
-match<-is.element(dataraw$date, dates_selectedtot$date)
-dataraw$selBRI<-FALSE
-dataraw$selBRI[match]<-TRUE
-
-#######------FIND 0.1 to 0.4 percentile bri.sd in 3 days window-------####
-for (i in 1:length(doyslist)){
-   tab3dayssd<-dataraw[dataraw$doy>doyslist[i]-2&dataraw$doy<doyslist[i]+2,]
-   tab3dayssd$percentiles<-ecdf(tab3dayssd$bri.sd)(tab3dayssd$bri.sd)
-   dataselectedsd0<-rbind(dataselectedsd0,
-                        tab3dayssd[tab3dayssd$percentiles>perc[1]&tab3dayssd$percentiles<perc[2],])
-}
-#eliminate duplicated
-datafssd<-dataselectedsd0[!duplicated(dataselectedsd0$date), ]
-
-#ADD a column identifying images matching the criteria of selection for bri.sd
-matchsd<-is.element(dataraw$date, datafssd$date)
-sum(match)
-dataraw$selBRISD<-0
-dataraw$selBRISD[matchsd]<-1
+    #######------FIND IMAGES MATCHING CONTRAST CRITERIA-------####
+    for (i in 1:length(doys)){
+       tab3dayscon<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
+       tab3dayscon$percentiles<-ecdf(tab3dayscon$bri.sd)(tab3dayscon$bri.sd)
+       dates_selected_con_i<-tab3dayscon[tab3dayscon$percentiles>perc[1]&tab3dayscon$percentiles<perc[2],])
+        if(i==1){dates_selected_con_tot<-dates_selected_con_i}else{
+                 dates_selected_con_tot<-rbind(dates_selected_con_tot,dates_selected_con_i)
+        }
+    # eliminate duplicated (some images may be selected more than once)
+    dates_selected_con_tot<-dates_selected_con_tot[!duplicated(dates_selected_con_tot$date), ]
+    
+    # add column selBRI in which images matching the criteria of selection for brightness are TRUE 
+    match_con<-is.element(dataraw$date, dates_selected_con_tot$date)
+    dataraw$selCON<-FALSE
+    dataraw$selCON[match_con]<-TRUE
 
 
-#######------ADD a COLUMN to identify images respecting both the conditions-------####
-
-dataraw$selSUM<-dataraw$selBRISD+dataraw$selBRIAV
-dataraw$selSUM[dataraw$selSUM==1]<-0
-dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
-dataraw$imname<-paste0("SiteJE",block,plot,"_2014",substr(dataraw$date,6,7),#yearmonth
-                       substr(dataraw$date,9,10),substr(dataraw$date,12,13),#dayhour
-                       substr(dataraw$date,15,16),".jpg")#minute
+     #######------FIND IMAGES MATCHING BOTH CRITERIA-------####
+     dataraw$selBRICON<-FALSE
+     dataraw$selBRICON[dataraw$selBRI==T&dataraw$selCON==T]<-T
+     dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
+      
 count[b,2]<-nrow(dataraw)
 count[b,3]<-nrow(dataraw[dataraw$selSUM==2,])
  setwd("your/folder/path/Phase_1_2014_filtered_indices_BRIAV_BRISD/")
