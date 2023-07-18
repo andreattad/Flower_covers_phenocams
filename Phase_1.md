@@ -103,30 +103,20 @@ To develop a labelled dataset, 300 images were randomly selected (60 images in t
 ```r
 library(stringr)
 ####---------------1)PREPARE THE LIST OF IMAGES TO BE LABELLED----------------###
-setwd("your/folder/path/Phase_1_2014_filtered_indices_BRICON/")
-list<-list.files(pattern="filt")
+setwd("your/folder/path/Phase_1_2014_filtered_indices_BRI_CON/")
+csv_name_list<-list.files(pattern="rawdatafilt")
 
 #### CREATE A LIST OF ALL THE FILTERED IMAGES ###
-for (i in 1:length(list)){
-  plot<-substr(list[i],12,14)
-  block<-blocks[i]
-  tab<-read.csv(list[i],row.names=1)
-  datafs<-tab[tab$selSUM==2,]
-     if(plot=="001"){  imlist<-datafs$imname} else{
-      imlist<-c(imlist,datafs$imname) }
-     }
-
+combined.df <- do.call(rbind , lapply(csv_name_list, read.csv, row.names = 1))
+imlist<-combined.df[combined.df$sel_BRICON==T,"imname"]
 imlistpath<-paste0("your/folder/path/IMGS_2014/",substr(imlist,8,10),"/",imlist)
-imlistpath[1]
+
 
 #### SAMPLE 60,60 and 180 images in the first, second and third periods, rispectively.###
 set.seed(1536)
-listperiod1<-sample( grep("_20140424|_20140425|_20140426|_20140427|_20140428|_20140429|_20140430|_20140501
-        |_20140502|_20140503|_20140504|_20140505", imlistpath,value=T), 60);set.seed(1536)
-listperiod2<-  sample(grep("_20140506|_20140507|_20140508|_20140509|_20140510|_20140511|_20140512|_20140513
-      |_20140514|_20140515|_20140516|_20140517|_20140518", imlistpath,value=T), 60);set.seed(1536)
-listperiod3<-sample(grep("_20140519|_20140520  |_20140521|_20140522|_20140523|_20140524|_20140525|
-                      _20140526|_20140527|_20140528|_20140529", imlistpath,value=T), 180)
+listperiod1<-sample( grep("_20140424|_20140425|_20140426|_20140427|_20140428|_20140429|_20140430|_20140501|_20140502|_20140503|_20140504|_20140505", imlistpath,value=T), 60);set.seed(1536)
+listperiod2<-  sample(grep("_20140506|_20140507|_20140508|_20140509|_20140510|_20140511|_20140512|_20140513|_20140514|_20140515|_20140516|_20140517|_20140518", imlistpath,value=T), 60);set.seed(1536)
+listperiod3<-sample(grep("_20140519|_20140520  |_20140521|_20140522|_20140523|_20140524|_20140525|_20140526|_20140527|_20140528|_20140529", imlistpath,value=T), 180)
 
 longsortedlist<-c(listperiod1,listperiod2,listperiod3)
 longsortedlist[101]
