@@ -40,7 +40,7 @@ materials include: Images, Region of interests and labels.
 ```
 setwd("your/folder/path")
 dir.create("Phase_1_2014_raw_indices")
-dir.create("Phase_1_2014_filtered_indices_BRIAV_BRISD")
+dir.create("Phase_1_2014_filtered_indices_BRI_CON")
 dir.create("Phase_1_lab_xy")
 dir.create("Phase_2_df_ws_ext_feat")
 dir.create("Phase_3_RF_classifiers")
