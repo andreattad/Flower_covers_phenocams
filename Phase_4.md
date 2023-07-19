@@ -14,13 +14,16 @@ library(terra)
     df=4
     bestBands<-names(rf[["forest"]][["xlevels"]])
     bestBands
-    plotIDs<-c("001", "002", "003", "005", "007", "008", "009", "010", "011", "013", "016", "017", "018",  "021", "024", "025", "026", "028", "030", "035", "037", "039", "040", "042", "043", "044" ,"045", "046","048", "049", "051", "053", "054", "056", "057", "058", "059", "060", "062", "064", "065", "067", "070", "071", "073", "074", "075", "077", "079", "080", "081", "082", "083", "084", "085", "088", "090", "091", "092","093", "094", "095", "097", "099", "100", "102", "103", "105", "108", "109", "110", "111", "113", "114", "115", "116", "119", "120", "121", "125", "128", "129", "130", "131", "133", "135", "136", "137", "138")
+    plotIDs<-c( "001","002","003","005","007","008","009","010","011","013","016","017","018","021",
+    "024","025","026","028","030","035","037","039","040","042","043","044","045","046","048","049",
+    "051","053","054","056","057","058","059","060","062","064","065","067","070","071","073","074",
+    "075","077","079","080","081","082","083","084","085","088","090","091","092","093","094","095",
+    "097","099","100","102","103","105","108","109","110","111","113","114","115","116","119","120",
+    "121","125","128","129","130","131","133","135","136","137","138")
 
 # Extract the flower covers 
-    # Expected processing time= 9 sec for each image, around 137 images per plot. Around 25 minutes for each plot
+    # Expected processing time= 9 sec for each image, around 137 images per plot. 25 min/plot
     for (plot in plotIDs){
-      df_sel$Gra_flower<-df_sel$Green_vegetation<-df_sel$Kna_arv_flower<-df_sel$Leu_vul_flower<-df_sel$Ran_acr_flower<-df_sel$Soil<-NA
-      time0 <- proc.time()[3]; 
       df_sel<-read.csv("./Phase_1_selected_images.csv",row.names=1)
       imlist<-df_sel$imlistpath
       for (i in 1:length(imlist)){
@@ -28,7 +31,8 @@ library(terra)
             img<-brick(imlist[i])
             load(paste("./ROISREFS_2014/",plot,"/ROI/roi.data.Rdata",sep=""))          
             imgr <- terra::aggregate(img, df)
-            #NB: here compute only the "best Bands selected in SFFS" in our case: rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
+            #NB: here compute only the "best Bands selected in SFFS" in our case:
+            # rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
             imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
             imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
             imgr[[6]]<-(imgr[[2]]-imgr[[1]])/(imgr[[2]]+imgr[[1]]-imgr[[3]])#VARI
@@ -54,15 +58,18 @@ library(terra)
             classified<-terra::predict(imgm,rf,na.rm=T)
             vals0<-summary(as.factor(classified@data@values))
             notNAcount<-sum(subset(vals0,!names(vals0)=="NA's"))       
-            df_sel[i,rf[["classes"]][1]]<-if(length(subset(vals0,names(vals0)=="1"))>0){subset(vals0,names(vals0)=="1")/notNAcount}else{NA}
-            df_sel[i,rf[["classes"]][2]]<-if(length(subset(vals0,names(vals0)=="2"))>0){subset(vals0,names(vals0)=="2")/notNAcount}else{NA}
-            df_sel[i,rf[["classes"]][3]]<-if(length(subset(vals0,names(vals0)=="3"))>0){subset(vals0,names(vals0)=="3")/notNAcount}else{NA}
-            df_sel[i,rf[["classes"]][4]]<-if(length(subset(vals0,names(vals0)=="4"))>0){subset(vals0,names(vals0)=="4")/notNAcount}else{NA}
-            df_sel[i,rf[["classes"]][5]]<-if(length(subset(vals0,names(vals0)=="5"))>0){subset(vals0,names(vals0)=="5")/notNAcount}else{NA}
-            df_sel[i,rf[["classes"]][6] ]<-if(length(subset(vals0,names(vals0)=="6"))>0){subset(vals0,names(vals0)=="6")/notNAcount}else{NA}
-            time1 <- proc.time()[3]
-            duration <- time1-time0
-            print(duration)
+            df_sel[i,rf[["classes"]][1]]<-if(length(subset(vals0,names(vals0)=="1"))>0){
+                                                subset(vals0,names(vals0)=="1")/notNAcount}else{NA}
+            df_sel[i,rf[["classes"]][2]]<-if(length(subset(vals0,names(vals0)=="2"))>0){
+                                                subset(vals0,names(vals0)=="2")/notNAcount}else{NA}
+            df_sel[i,rf[["classes"]][3]]<-if(length(subset(vals0,names(vals0)=="3"))>0){
+                                                subset(vals0,names(vals0)=="3")/notNAcount}else{NA}
+            df_sel[i,rf[["classes"]][4]]<-if(length(subset(vals0,names(vals0)=="4"))>0){
+                                                subset(vals0,names(vals0)=="4")/notNAcount}else{NA}
+            df_sel[i,rf[["classes"]][5]]<-if(length(subset(vals0,names(vals0)=="5"))>0){
+                                                subset(vals0,names(vals0)=="5")/notNAcount}else{NA}
+            df_sel[i,rf[["classes"]][6] ]<-if(length(subset(vals0,names(vals0)=="6"))>0){
+                                                 subset(vals0,names(vals0)=="6")/notNAcount}else{NA}
       }
     # Save the flower covers of all selected images for each plot as a csv file.
     write.csv(df_sel,file = paste("./Phase_4_FCTS/dataflowers",plot,".csv",sep=""))
@@ -89,7 +96,7 @@ for (i in 1:length(list)){
   # LOAD THE TIME_SERIES and REMOVE OUTLIERS
   plot<-substr(list[1],nchar(list[1])-6,nchar(list[1])-4)
   ts<-read.csv(list[i],stringsAsFactors = F)
-  ts[is.na(ts)]<-0  #NA was assigned during classification to classes with zero pixels in the image, so we can set it to zero
+  ts[is.na(ts)]<-0  #NA was assigned during classification to classes with zero pixels
   tszo<-read.zoo(ts[,c("date",classes)],tryFormats= c("%d/%m/%Y %H:%M","%Y-%m-%d %H:%M"))
   
    # remove outliers in each class
@@ -147,7 +154,7 @@ fall$date<-as.Date(fall0$date)
 fall<-fall[fall$class %in% classes_flowers,]
 
 # Upload the plot composition, i.e. the list of species sown in each plot.
-compo<-read.csv(your/folder/path/Phase_4_plot_composition.csv")
+compo<-read.csv("./Phase_4_plot_composition.csv")
 #create new column for each flower class, specifying if that flower species was sown in that plot
 compo$Ran_acr_flower<-grepl("Ranunculus", compo$sp_list)
 compo$Leu_vul_flower<-grepl("Leucanthemum", compo$sp_list)
