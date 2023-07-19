@@ -15,7 +15,7 @@ summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
                     f1=c(rep(NA,5))
                     )
 # ------------------------------------------------------------
-# 0 PREPARE THE TRAINING AND TESTING DATASETS
+# PREPARE THE TRAINING AND TESTING DATASETS
 #------------------------------------------------------------
 # Load the labelled and sampled points calculated using the best downscaling factor - window size combinations, as resulted from phase 2.2
 # Load the dataset of the labelled and sampled pixels calculated using the best df-ws combination (phase 2.2) and replace VARI infinite values
