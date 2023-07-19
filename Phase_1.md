@@ -8,7 +8,12 @@ In this script, our aim is to extract brightness average and contrast for each i
 ```r
 library(phenopix)
 
-plotIDs<-c("001", "002", "003", "005", "007", "008", "009", "010", "011", "013", "016", "017", "018",  "021", "024", "025", "026", "028", "030", "035", "037", "039", "040", "042", "043", "044" ,"045", "046","048", "049", "051", "053", "054", "056", "057", "058", "059", "060", "062", "064", "065", "067", "070", "071", "073", "074", "075", "077", "079", "080", "081", "082", "083", "084", "085", "088", "090", "091", "092","093", "094", "095", "097", "099", "100", "102", "103", "105", "108", "109", "110", "111", "113", "114", "115", "116", "119", "120", "121", "125", "128", "129", "130", "131", "133", "135", "136", "137", "138")
+plotIDs<-c("001", "002", "003", "005", "007", "008", "009", "010", "011", "013", "016", "017", "018",  "021",
+"024", "025", "026", "028", "030", "035", "037", "039", "040", "042", "043", "044" ,"045", "046","048", "049",
+ "051", "053", "054", "056", "057", "058", "059", "060", "062", "064", "065", "067", "070", "071", "073", "074",
+ "075", "077", "079", "080", "081", "082", "083", "084", "085", "088", "090", "091", "092","093", "094", "095",
+ "097", "099", "100", "102", "103", "105", "108", "109", "110", "111", "113", "114", "115", "116", "119", "120",
+ "121", "125", "128", "129", "130", "131", "133", "135", "136", "137", "138")
 
 # Extract vegetation indices
 time0.all <- proc.time()[3]
@@ -37,10 +42,11 @@ Images with uniform light conditions were retrieved by selecting brightness and 
 # Define settings
 start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
-perc<-c(0.1,0.4)    #Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile in a 3-days window
+perc<-c(0.1,0.4)    #Images with uniform light conditions
 
 for (plot in 1:plotIDs){
-   dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),encoding="UTF-8",row.names=1 )
+   dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),
+                      encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
    doys<-doys[doys>start&doys<end]
 
@@ -48,7 +54,8 @@ for (plot in 1:plotIDs){
              for (i in 1:length(doys)){
                   tab3daysbri<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
                   tab3daysbri$percentiles<-ecdf(tab3daysbri$bri.av)(tab3daysbri$bri.av)
-                  dates_selected_bri_i<-tab3daysbri[tab3daysbri$percentiles>perc[1]&tab3daysbri$percentiles<perc[2],]
+                  dates_selected_bri_i<-tab3daysbri[tab3daysbri$percentiles>perc[1]&
+                                        tab3daysbri$percentiles<perc[2],]
                   if(i==1){dates_selected_bri_tot<-dates_selected_bri_i}else{
                            dates_selected_bri_tot<-rbind(dates_selected_bri_tot,dates_selected_bri_i)
                   }}
@@ -64,7 +71,8 @@ for (plot in 1:plotIDs){
               for (i in 1:length(doys)){
                  tab3dayscon<-dataraw[dataraw$doy>doys[i]-2&dataraw$doy<doys[i]+2,]
                  tab3dayscon$percentiles<-ecdf(tab3dayscon$bri.sd)(tab3dayscon$bri.sd)
-                 dates_selected_con_i<-tab3dayscon[tab3dayscon$percentiles>perc[1]&tab3dayscon$percentiles<perc[2],]
+                 dates_selected_con_i<-tab3dayscon[tab3dayscon$percentiles>perc[1]&
+                                        tab3dayscon$percentiles<perc[2],]
                   if(i==1){dates_selected_con_tot<-dates_selected_con_i}else{
                            dates_selected_con_tot<-rbind(dates_selected_con_tot,dates_selected_con_i)
                   }}
@@ -109,7 +117,8 @@ setwd("your/folder/path/")
 csv_name_list<-list.files(path="./Phase_1_2014_filtered_indices_BRI_CON/",pattern="rawdatafilt")
 combined.df <- do.call(rbind , lapply(csv_name_list, read.csv, row.names = 1))
 combined.df_sel<-combined.df[combined.df$selBRICON==T,]
-combined.df_sel$imlistpath<-paste0(maindir,"IMGS_2014/",substr(combined.df_sel$imname,8,10),"/",combined.df_sel$imname)
+combined.df_sel$imlistpath<-paste0(maindir,"IMGS_2014/",
+                        substr(combined.df_sel$imname,8,10),"/",combined.df_sel$imname)
 write.csv(combined.df_sel,file="./Phase_1_selected_images.csv")
 
 # Identify which images were selected in each of the three periods
@@ -160,9 +169,13 @@ classes <- c("Soil", "Green_vegetation", "Kna_arv_flower", "Ran_acr_flower", "Le
 #  2) select one class (e.g, Soil)
 class<-classes[1]
 #  3) run the line below where "RUN HERE" is written, an image will appear in the plot pane.
-#  4) If there are some, click on some pixels of the class selected in point 2, (e.g., Soil), then press esc on the keyboard. A dataframe with coordinates, image name and label will be saved as a ".csv" file.
-#  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane. Repeat point 4) and 5) until all the images have been labelled
-#  6) when you will have put some labels on all images, go to point 2) and select the second class. Then go on with point 3),4),5),6) until all classes will be labelled.  
+#  4) If there are some, click on some pixels of the class selected in point 2, (e.g., Soil),
+     # then press esc on the keyboard.
+     # A dataframe with coordinates, image name and label will be saved as a ".csv" file.
+#  5) press Ctrl+Alt+T to run the section again. A new image will appear in the plot pane.
+     # Repeat point 4) and 5) until all the images have been labelled
+#  6) when you will have put some labels on all images, go to point 2) and select the second class.
+     # Then go on with point 3),4),5),6) until all classes will be labelled.  
 #  NB: LOCATOR WORKS PROPERLY ONLY WHEN ZOOM IN GLOBAL OPTIONS IS SET TO 100 %
    
 
@@ -183,7 +196,8 @@ class<-classes[1]
                           labelled$im<-imgslist[i];
                           labelled$zoiCx<-zoiCx;
                           labelled$zoiCy<-zoiCy
-                          write.csv(labelled,file=paste0("your/folder/path/Phase_1_lab_xy/","lab_xy_pic_",sprintf("%03d", i),"class_",class,".csv"))}
+                          write.csv(labelled,file=paste0("your/folder/path/Phase_1_lab_xy/","lab_xy_pic_",
+                          sprintf("%03d", i),"class_",class,".csv"))}
                         }
 
 ```
