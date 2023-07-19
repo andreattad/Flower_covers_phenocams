@@ -1,5 +1,5 @@
 # **Tutorial for the manuscript "Extracting single species flowering phenology from grassland species mixtures using time-lapse cameras"**
-by D.Andreatta, V. Klaus, C. Bachofen, M. Dalponte, N.Buchmann.   
+by D.Andreatta, C. Bachofen, M. Dalponte, V. Klaus, N.Buchmann.   
 Submitted to Remote Sensing of Environment. 
 Contact information: davide.andreatta@phd.unipd.it.
 
