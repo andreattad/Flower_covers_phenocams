@@ -131,9 +131,8 @@ For each FCTS, onset, peak and end of flowering were extracted. The peak was ide
 
 <figure>
   <img src="https://drive.google.com/uc?id=1mPElue8oWmRnwIJ7BoIU2FAmIIoRke4z" width="600">
-  <figcaption>_Flowering phenological metrics identification (Figure 3 in the manuscript)_</figcaption>
+  <figcaption> __Flowering phenological metrics identification__ </figcaption>
 </figure>
-
 
 ```r
 library(dplyr)
