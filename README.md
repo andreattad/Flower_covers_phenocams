@@ -48,6 +48,7 @@ dir.create("Phase_1_lab_xy")
 dir.create("Phase_2_df_ws_ext_feat")
 dir.create("Phase_3_RF_classifiers")
 dir.create("Phase_4_FCTS")
+dir.create("Phase_4_Classified_images_")
 ```
 
 ## 3. Install the required R packages
