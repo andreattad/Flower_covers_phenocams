@@ -126,3 +126,72 @@ for (i in 1:length(list)){
 
 write.csv(fall,file="./Phase_4_fitted_flower_cover_long_with_SE.csv")
 ```
+# 4.3 Phenological metric extraction
+For each FCTS, onset, peak and end of flowering were extracted. The peak was identified as the day of maximum in the FCTS. Onset of flowering was identified as the first day above the 10th percentile of the cumulative flower cover until peak, whereas the end of the season was identified as the first day above the 90th percentile of the cumulative flower cover after the peak, as explained in Figure 3. In our case study it was not possible to extract all the metrics from all FCTS, since in a few cases flowering started before the start of observations (i.e. spring weeding), and in many cases the peak and the end of flowering were not observed because mowing interrupted grassland development. Therefore, we limited the flowering metrics extraction: the onset was extracted in FCTS having flower cover at the first observation day lower than one third of the maximum flower cover, end of the season in FCTS having flower cover at the last observation day lower than one third of the maximum flower cover, all metrics were extracted only in FCTS with peak after first observation day and before last observation day and flower cover at peak higher than 1%.
+
+![Flowering phenological metrics identification (Figure 3 in the manuscript)](pm_extraction.png)
+
+```r
+
+library(dplyr)
+setwd("your/folder/path")
+classes<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower","Green_vegetation","Soil")
+classes_flowers<-classes[1:4]
+
+# Upload all the fitted flower covers
+fall<-read.csv(stringsAsFactors=T,file="./Phase_4_fitted_flower_cover_long_with_SE.csv",row.names=1)
+fall$date<-as.Date(fall0$date)
+# keep only FCTS of flowers (remove "Green vegetation" and "Soil" covers)
+fall<-fall[fall$class %in% classes_flowers,]
+
+# Upload the plot composition, i.e. the list of species sown in each plot.
+compo<-read.csv(your/folder/path/Phase_4_plot_composition.csv")
+#create new column for each flower class, specifying if that flower species was sown in that plot
+compo$Ran_acr_flower<-grepl("Ranunculus", compo$sp_list)
+compo$Leu_vul_flower<-grepl("Leucanthemum", compo$sp_list)
+compo$Kna_arv_flower<-grepl("Knautia", compo$sp_list)
+compo$Gra_flower<-grepl("Festuca|Avenula|Poa|Anthoxanthum|Phleum|Dactylis|Holcus", compo$sp_list)
+
+# Merge fitted FCTS and sown species list based on plot_ID
+merged_df <- merge(fall, compo, by = "plot")
+
+# Create a new column indicating if the flower species in the "class" column was sown in that plot
+class_index <- match(merged_df$class, classes_flower)
+merged_df$sown <- merged_df[, classes_flower][cbind(1:nrow(merged_df), class_index)]
+
+
+limitonset<-.1
+limitend<-.9
+
+findpm<-function(df){
+   onset<-peak<-end<-NA
+   dates<-df$date
+   vec<-df$fit
+      dfbeforepeak=data.frame(date=dates[1:which.max(vec)],vec=vec[1:which.max(vec)])
+      dfbeforepeak$rescaled<-rescale(cumsum(dfbeforepeak$vec))
+      dfafterpeak<-data.frame(date=dates[(which.max(vec)):length(vec)],vec=vec[(which.max(vec)):length(vec)])
+      dfafterpeak$rescaled<-rescale(cumsum(dfafterpeak$vec))
+         onset<-dfbeforepeak$date[which(dfbeforepeak$rescaled>limitonset)[1]]
+         peak<-dates[which.max(vec)]
+         end<-dfafterpeak$date[which(dfafterpeak$rescaled>limitend)[1]]
+         pm<-c(onset,peak,end)
+           if(max(vec)<0.01){pm<-NA}
+           if(vec[1]>(.01)){pm[1]<-NA}
+           if(vec[length(vec)]>(.01)){pm[3]<-NA}
+           if(peak==max(dates)|peak==min(dates)){pm<-NA}
+   return(pm)
+}
+
+
+# Identify flowering phenological metric for each FCTS 
+phenometrics<-merged_df%>%
+   group_by(plot,class,sown) %>%
+   dplyr::summarize(onset = findpm(cur_data())[1],
+                    peak = findpm(cur_data())[2],
+                    end = findpm(cur_data())[3])
+
+# Identify flowering phenological metric for FCTS of the sown species
+phenometrics_sown<-phenometrics%>%
+   filter(sown==T)
+summary(is.na(phenometrics_sown))
+```
