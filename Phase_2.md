@@ -17,8 +17,7 @@ setwd(maindir<-"your/folder/path")
   labs<-read.csv(row.names=1,"./Phase_1_labelled.csv",stringsAsFactors = T)
   ims<-unique(labs$im)
 
-# 2 Define df-ws combinations and extract the image features in the labelled pixel using all the df-ws combinations
-  #define downscaling factor and window size levels and combinations
+# 2 Define df-ws combinations and extract the image features in the labelled pixel 
   dfs<-c("08","04","02","01")
   wss<-c("03","05","07","11","19","27","43")
   combi0<-data.frame(dfs=as.numeric(sort(rep(dfs,length(wss)))),wss=as.numeric(rep(wss,length(dfs))))
@@ -30,11 +29,10 @@ setwd(maindir<-"your/folder/path")
     ws<-combi$wss[f];ws
     
       for (i in 1: length(ims)){
-          print(i);
-          labsi<-pts<-cropped<-img<-glcm.blue<-glcm.green<-glcm.red<-pt<-ptsa_data<-rown<-coln<-cellnum<-xmin<-xmax<-ymin<-ymax<-new.extent<-NA
+
         # Load the image and aggregate it
           img0<-brick(as.character(ims[i]))
-          img<-crop(img0,extent(0,1280,16,1040)) #The 16 rows at the bottom of the pictures contain the timestamps.
+          img<-crop(img0,extent(0,1280,16,1040)) #16 rows at the bottom of the pictures contain the timestamps.
           imgr <- terra::aggregate(img,fact=df)
 
         # Load the points and define the minimum extent required to compute points features
@@ -45,33 +43,35 @@ setwd(maindir<-"your/folder/path")
           coln<-rowColFromCell(imgr, cellnum)[,2]
           xmin<-((min(coln)-((ws-1)/2))-2)*df
           xmax<-((max(coln)+((ws-1)/2))+1)*df
-          ymin<-extent(imgr)[4]-((max(rown)+((ws-1)/2))+1)*df#rownumbering from top to bottom but ycoord from bottom to top
+          ymin<-extent(imgr)[4]-((max(rown)+((ws-1)/2))+1)*df
           ymax<-extent(imgr)[4]-((min(rown)-((ws-1)/2))-2)*df
           new.extent<-extent(xmin,xmax,ymin,ymax)
           cropped<-crop(imgr,new.extent)
 
         # compute the image features
-          cropped[[4]]<-((cropped[[2]]*cropped[[2]])-(cropped[[1]]*cropped[[3]]))/((cropped[[2]]*cropped[[2]])+(cropped[[1]]*cropped[[3]]))#RGBVI
-          cropped[[5]]<-((2*cropped[[2]])-cropped[[1]]-cropped[[3]])/((2*cropped[[2]])+cropped[[1]]+cropped[[3]])#GLI
+          cropped[[4]]<-((cropped[[2]]*cropped[[2]])-(cropped[[1]]*cropped[[3]]))/
+                        ((cropped[[2]]*cropped[[2]])+(cropped[[1]]*cropped[[3]]))#RGBVI
+          cropped[[5]]<-((2*cropped[[2]])-cropped[[1]]-cropped[[3]])/
+                        ((2*cropped[[2]])+cropped[[1]]+cropped[[3]])#GLI
           cropped[[6]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]]-cropped[[3]])#VARI
           cropped[[7]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]])#NGRDI
           glcm.red <- glcm(cropped[[1]],
                            window = c(ws, ws),
                            na_opt="center",min_x=0,max_x=255,
                            shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                           statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                           statistics = c("variance","homogeneity","contrast","entropy",
                                           "dissimilarity", "second_moment","mean"))
           glcm.green <- glcm(cropped[[2]],
                              window = c(ws, ws),
                              na_opt="center",min_x=0,max_x=255,
                              shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                             statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                             statistics = c("variance","homogeneity","contrast","entropy",
                                             "dissimilarity", "second_moment","mean"))
           glcm.blue <- glcm(cropped[[3]],
                             window = c(ws, ws),
                             na_opt="center",min_x=0,max_x=255,
                             shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                            statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                            statistics = c("variance","homogeneity","contrast","entropy",
                                            "dissimilarity", "second_moment","mean"))
 
         # Stack the features, extract their values at labelled pixels
@@ -83,10 +83,10 @@ setwd(maindir<-"your/folder/path")
           ptsa@data$imname<-ims[i]
           ptsa_data<-ptsa@data
           colnames(ptsa_data)<-c("R","G","B","rgbvi","gli","vari","ngrdi",
-                                 "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
-                                 "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
-                                 "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean",
-                                 "x","y","type","imname")
+               "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
+               "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
+               "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean",
+               "x","y","type","imname")
    # stack all extracted features values in a file for each df-ws combination and save it as a csv file
         if(i==1){totsampled<-ptsa_data}else{totsampled<-rbind(totsampled,ptsa_data)}
       }
@@ -102,7 +102,6 @@ The metric to calculate the accuracy of the RF classifiers was the mean F1 score
 ```r
 library(randomForest)
 library(crfsuite)
-library(bigstatsr)
 library(readr)
 library(dplyr)
 library(raster)
@@ -125,11 +124,11 @@ for (i in 1:length(files) ){
     data$vari[data$vari==Inf]<-max(data$vari[is.finite(data$vari)])
     data$vari[data$vari==-Inf]<-min(data$vari[is.finite(data$vari)])
 
-  # Split the dataset into training and validation so that points of the same image are in the same subset.
+  # Split the dataset into training and validation so that points of the same image are in the same subset
     set.seed(1409)
     train_index<- sample(seq(1,length(unique(data$imname))),round(length(unique(data$imname))*0.7))
     imgst<-unique(data$imname)[train_index]
-    data$tv<-NULL #We create a new column that labels each observation as either "training" or "validation" based on the subdataset to which it has been assigned.
+    data$tv<-NULL #We create a new column that labels each observation as either "training" or "validation"
     train<-data[is.element(data$imname,imgst),c("tv")]<-"t"
     valid<-data[!is.element(data$imname,imgst),c("tv")]<-"v"
     train<-data[data$tv=="t",]
