@@ -17,8 +17,7 @@ summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
 # ------------------------------------------------------------
 # PREPARE THE TRAINING AND TESTING DATASETS
 #------------------------------------------------------------
-# Load the labelled and sampled points calculated using the best downscaling factor - window size combinations, as resulted from phase 2.2
-# Load the dataset of the labelled and sampled pixels calculated using the best df-ws combination (phase 2.2) and replace VARI infinite values
+# Load the labelled and sampled points calculated using the best df-ws combinations (phase 2.2)
   data<-NA
   data<-read.csv(stringsAsFactors=T,paste0("./Phase_2_df_ws_ext_feat/",files[i]),row.names=1)
   data$vari<-as.numeric(data$vari)
@@ -26,11 +25,11 @@ summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
   data$vari[data$vari==Inf]<-max(data$vari[is.finite(data$vari)])
   data$vari[data$vari==-Inf]<-min(data$vari[is.finite(data$vari)])
 
-# Split the dataset into training and validation so that points of the same image are in the same subset.
+# Split the dataset into training and validation so that points of the same image are in the same subset
   set.seed(1409)
   train_index<- sample(seq(1,length(unique(data$imname))),round(length(unique(data$imname))*0.7))
   imgst<-unique(data$imname)[train_index]
-  data$tv<-NULL #We create a new column that labels each observation as either "training" or "validation" based on the subdataset to which it has been assigned.
+  data$tv<-NULL
   train<-data[is.element(data$imname,imgst),c("tv")]<-"t"
   valid<-data[!is.element(data$imname,imgst),c("tv")]<-"v"
   train<-data[data$tv=="t",]
@@ -52,7 +51,8 @@ summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
   table(pred_rf_ALLB, test$type)
   saveRDS(classifier_RF_ALLB,"./Phase_3_RF_classifiers/RF_all.rds")
    
-  summary[summary$name_test=="all","bands_used"]<-paste0("'",paste(colnames(train[,c(1:28)]),collapse="','"),"'")
+  summary[summary$name_test=="all","bands_used"]<-paste0("'",
+                                        paste(colnames(train[,c(1:28)]),collapse="','"),"'")
   summary[summary$name_test=="all","f1"]<-metrics[["overall"]][["f1_mean"]]
   
 #------------------------------------------------------------
@@ -172,25 +172,25 @@ load(paste("./ROISREFS_2014/A/010/ROI/roi.data.Rdata",sep=""))
                      window = c(ws, ws),#deve essere dispari
                      na_opt="center",min_x=0,max_x=255,
                      shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                     statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                     statistics = c("variance","homogeneity","contrast","entropy",
                                     "dissimilarity", "second_moment","mean"))
     glcm.green <- glcm(imgr[[2]],
                      window = c(ws, ws),#deve essere dispari
                      na_opt="center",min_x=0,max_x=255,
                      shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                     statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                     statistics = c("variance","homogeneity","contrast","entropy",
                                     "dissimilarity", "second_moment","mean"))
     glcm.blue <- glcm(imgr[[3]],
                      window = c(ws, ws),#deve essere dispari
                      na_opt="center",min_x=0,max_x=255,
                      shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                     statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                     statistics = c("variance","homogeneity","contrast","entropy",
                                     "dissimilarity", "second_moment","mean"))
     imgm<-mask(stack(imgr,glcm.red,glcm.green,glcm.blue),roi.data[[1]]$polygons)
     names(imgm)<-c("R","G","B","rgbvi","gli","vari","ngrdi",
-                           "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
-                           "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
-                           "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean")
+           "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
+           "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
+           "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean")
     classified<-terra::predict(imgm,classifier_RF,na.rm=T)
     time1 <- proc.time()[3]
     summary$durations[1]<-duration <- as.numeric(time1-time0)
@@ -260,9 +260,9 @@ load(paste("./ROISREFS_2014/A/010/ROI/roi.data.Rdata",sep=""))
                                      "dissimilarity", "second_moment","mean"))
     imgm<-mask(stack(imgr,glcm.red,glcm.green,glcm.blue),roi.data[[1]]$polygons)
     names(imgm)<-c("R","G","B",
-                   "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
-                   "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
-                   "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean")
+           "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
+           "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
+           "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean")
     classified<-terra::predict(imgm,classifier_RF,na.rm=T)
     time1 <- proc.time()[3]
     summary$durations[4]<-duration <- as.numeric(time1-time0)
@@ -278,7 +278,8 @@ load(paste("./ROISREFS_2014/A/010/ROI/roi.data.Rdata",sep=""))
   time0 <- proc.time()[3] 
     imgr<-brick("./IMGS_2014/010/SiteJEA010_201404121334.jpg")
     imgr <- terra::aggregate(imgr, df)
-    #NB: here compute only the "best Bands selected in SFFS" in our case: rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
+    #NB: here compute only the "best Bands selected in SFFS" in our case:
+    # rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
     imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
     imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
     imgr[[6]]<-(imgr[[2]]-imgr[[1]])/(imgr[[2]]+imgr[[1]]-imgr[[3]])#VARI
