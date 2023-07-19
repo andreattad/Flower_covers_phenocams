@@ -7,6 +7,7 @@ In this script, our aim is to extract brightness average and contrast for each i
 
 ```r
 library(phenopix)
+setwd("your/folder/path")
 
 plotIDs<-c( "001","002","003","005","007","008","009","010","011","013","016","017","018","021",
 "024","025","026","028","030","035","037","039","040","042","043","044","045","046","048","049",
@@ -19,10 +20,9 @@ plotIDs<-c( "001","002","003","005","007","008","009","010","011","013","016","0
 time0.all <- proc.time()[3]
 for (plot in plotIDs) {
   time0 <- proc.time()[3]
-  path.JPG <- paste("your/folder/path/IMGS_2014/", plot"/", sep="")
-  path.ROI <- paste("your/folder/path/ROISREFS_2014/", plot, "/ROI/", sep="")
-  path.VI <- paste("your/folder/path/ROISREFS_2014/", plot, "/VI/", sep="")
-  setwd(path.JPG);
+  path.JPG <- paste("./IMGS_2014/", plot"/", sep="")
+  path.ROI <- paste("./ROISREFS_2014/", plot, "/ROI/", sep="")
+  path.VI <- paste("./ROISREFS_2014/", plot, "/VI/", sep="")
   extracted<-extractVIs(path.JPG, path.ROI, vi.path=path.VI,plot=F, spatial=F, date.code="yyyymmddHHMM")
   duration <- proc.time()[3]-time0;
   print(duration)
@@ -30,8 +30,8 @@ for (plot in plotIDs) {
 
 # Convert from Rdata format to csv format and save all them in the same folder
 for (plot in plotIDs) {
-  load(paste0("your/folder/path/ROISREFS_2014/", plot, "/VI/VI.data.Rdata"))
-  path.csv <- "your/folder/path/Phase_1_2014_raw_indices/"
+  load(paste0("./ROISREFS_2014/", plot, "/VI/VI.data.Rdata"))
+  path.csv <- "./Phase_1_2014_raw_indices/"
   write.csv(VI.data$roi1,file=paste0(path.csv,"VI_raw2014_", plot,".csv"))
 }
 ```
@@ -39,13 +39,14 @@ for (plot in plotIDs) {
 Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile within a 3-day window. The selection of the best images within this 3-day window avoided including images taken on days with sub-optimal observations (e.g., all foggy/high contrast images).
 
 ```r
+setwd("your/folder/path")
 # Define settings
 start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
 perc<-c(0.1,0.4)    #Images with uniform light conditions
 
 for (plot in 1:plotIDs){
-   dataraw<- read.csv(paste0("your/folder/path/Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),
+   dataraw<- read.csv(paste0("./Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),
                       encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
    doys<-doys[doys>start&doys<end]
@@ -97,8 +98,7 @@ for (plot in 1:plotIDs){
                                               substr(dataraw$date,12,13),#hour
                                               substr(dataraw$date,15,16),".jpg")#minute
                dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
-               setwd("your/folder/path/Phase_1_2014_filtered_indices_BRI_CON/")
-               write.csv(dataraw,file = paste("rawdatafilt",plot,".csv",sep=""))
+               write.csv(dataraw,file = paste("./Phase_1_2014_filtered_indices_BRI_CON/rawdatafilt",plot,".csv",sep=""))
 }
 
 ```
@@ -111,7 +111,7 @@ To develop a labelled dataset, 300 images were randomly selected (60 images in t
 ```r
 library(stringr)
 
-setwd("your/folder/path/")
+setwd("your/folder/path")
 
 # Create a list of all the filtered images
 csv_name_list<-list.files(path="./Phase_1_2014_filtered_indices_BRI_CON/",pattern="rawdatafilt")
@@ -139,12 +139,12 @@ list3periods_shuffled<-sample(list3periods,c(60+60+180))
 
 # Copy the 300 sampled images to a folder to inspect them
 file.copy(list3periods_shuffled,
-          paste0("your/folder/path/Phase_1_check_sel_imgs/",
+          paste0("./Phase_1_check_sel_imgs/",
                  sapply(list3periods_shuffled, function(x) str_extract(x, "(SiteJE\\w+)")))
 )
 
 # Save the list of the 300 sampled images
-write.csv(list3periods_shuffled,file = "your/folder/path/Phase_1_imgslist300.csv")
+write.csv(list3periods_shuffled,file = "./Phase_1_imgslist300.csv")
 
 ```
 ## Image patches  labelling
@@ -155,9 +155,10 @@ For each image, a 200 pixels × 200 pixels image patch was randomly selected and
 library(raster)
 library(rgdal)
 rm(list=ls());
+setwd("your/folder/path")
 
 # load the image list and create seeds list that you will use to select a random 200X200 detail in the image
-imgslist<-read.csv(file = "your/folder/path/Phase_1_imgslist300.csv",
+imgslist<-read.csv(file = "./Phase_1_imgslist300.csv",
                       row.names=1)[,1]
 set.seed(1002); seedsx<-sample(1:2^15,300)
 set.seed(1056); seedsy<-sample(1:2^15,300)
@@ -196,7 +197,7 @@ class<-classes[1]
                           labelled$im<-imgslist[i];
                           labelled$zoiCx<-zoiCx;
                           labelled$zoiCy<-zoiCy
-                          write.csv(labelled,file=paste0("your/folder/path/Phase_1_lab_xy/","lab_xy_pic_",
+                          write.csv(labelled,file=paste0("./Phase_1_lab_xy/","lab_xy_pic_",
                           sprintf("%03d", i),"class_",class,".csv"))}
                         }
 
