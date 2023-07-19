@@ -54,10 +54,9 @@ dir.create("Phase_4_Classified_images_")
 ## 3. Install the required R packages
 
 ```
-packages <- c("bigstatsr", "crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
-              "ggpubr", "ggrepel", "ggtext", "glcm", "grid", "gridExtra", "jpeg",
-              "lattice", "phenopix", "randomForest", "raster", "readr", "reshape2",
-              "rgdal", "sp", "stringr", "terra", "tidyr", "varSel", "zoo")
+packages <- c("crfsuite", "data.table", "dplyr", "forecast", "ggplot2", 
+              "ggpubr", "ggtext", "glcm", "grid", "phenopix", "randomForest",
+              "raster", "readr", "rgdal", "sp", "stringr", "terra", "varSel", "zoo")
 # Load or install missing packages
 lapply(packages, function(package) {
   if (!require(package, character.only = TRUE)) {
