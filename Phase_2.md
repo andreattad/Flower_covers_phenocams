@@ -11,11 +11,10 @@ library(crfsuite)
 library(raster)
 library(terra)
 library(glcm)
-
-rm(list=ls())
+setwd(maindir<-"your/folder/path")
 
 # 1 Load the labelled pixels dataset
-  labs<-read.csv(row.names=1,"your/folder/path/Phase_1_labelled.csv",stringsAsFactors = T)
+  labs<-read.csv(row.names=1,"./Phase_1_labelled.csv",stringsAsFactors = T)
   ims<-unique(labs$im)
 
 # 2 Define df-ws combinations and extract the image features in the labelled pixel using all the df-ws combinations
@@ -49,51 +48,108 @@ rm(list=ls())
           ymin<-extent(imgr)[4]-((max(rown)+((ws-1)/2))+1)*df#rownumbering from top to bottom but ycoord from bottom to top
           ymax<-extent(imgr)[4]-((min(rown)-((ws-1)/2))-2)*df
           new.extent<-extent(xmin,xmax,ymin,ymax)
-        # crop the image
-        cropped<-crop(imgr,new.extent)
-        # compute the image features
-        cropped[[4]]<-((cropped[[2]]*cropped[[2]])-(cropped[[1]]*cropped[[3]]))/((cropped[[2]]*cropped[[2]])+(cropped[[1]]*cropped[[3]]))#RGBVI
-        cropped[[5]]<-((2*cropped[[2]])-cropped[[1]]-cropped[[3]])/((2*cropped[[2]])+cropped[[1]]+cropped[[3]])#GLI
-        cropped[[6]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]]-cropped[[3]])#VARI
-        cropped[[7]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]])#NGRDI
+          cropped<-crop(imgr,new.extent)
 
-        
-        glcm.red <- glcm(cropped[[1]],
-                         window = c(ws, ws),
-                         na_opt="center",min_x=0,max_x=255,
-                         shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                         statistics = c("variance",       "homogeneity","contrast",        "entropy",
-                                        "dissimilarity", "second_moment","mean"))
-        glcm.green <- glcm(cropped[[2]],
+        # compute the image features
+          cropped[[4]]<-((cropped[[2]]*cropped[[2]])-(cropped[[1]]*cropped[[3]]))/((cropped[[2]]*cropped[[2]])+(cropped[[1]]*cropped[[3]]))#RGBVI
+          cropped[[5]]<-((2*cropped[[2]])-cropped[[1]]-cropped[[3]])/((2*cropped[[2]])+cropped[[1]]+cropped[[3]])#GLI
+          cropped[[6]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]]-cropped[[3]])#VARI
+          cropped[[7]]<-(cropped[[2]]-cropped[[1]])/(cropped[[2]]+cropped[[1]])#NGRDI
+          glcm.red <- glcm(cropped[[1]],
                            window = c(ws, ws),
                            na_opt="center",min_x=0,max_x=255,
                            shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
                            statistics = c("variance",       "homogeneity","contrast",        "entropy",
                                           "dissimilarity", "second_moment","mean"))
-        glcm.blue <- glcm(cropped[[3]],
-                          window = c(ws, ws),
-                          na_opt="center",min_x=0,max_x=255,
-                          shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
-                          statistics = c("variance",       "homogeneity","contrast",        "entropy",
-                                         "dissimilarity", "second_moment","mean"))
-   
+          glcm.green <- glcm(cropped[[2]],
+                             window = c(ws, ws),
+                             na_opt="center",min_x=0,max_x=255,
+                             shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
+                             statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                                            "dissimilarity", "second_moment","mean"))
+          glcm.blue <- glcm(cropped[[3]],
+                            window = c(ws, ws),
+                            na_opt="center",min_x=0,max_x=255,
+                            shift=list(c(0,1), c(1,1), c(1,0), c(1,-1)),
+                            statistics = c("variance",       "homogeneity","contrast",        "entropy",
+                                           "dissimilarity", "second_moment","mean"))
+
         # Stack the features, extract their values at labelled pixels
-        imgr2<-stack(cropped,glcm.red,glcm.green,glcm.blue)
-        ptsa<-raster::extract(imgr2,pt,sp=T)
-        ptsa@data$x<-ptsa@coords[,1]
-        ptsa@data$y<-ptsa@coords[,2]
-        ptsa@data$type<-labsi$type
-        ptsa@data$imname<-ims[i]
-        ptsa_data<-ptsa@data
-        colnames(ptsa_data)<-c("R","G","B","rgbvi","gli","vari","ngrdi",
-                               "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
-                               "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
-                               "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean",
-                               "x","y","type","imname")
-    
+          imgr2<-stack(cropped,glcm.red,glcm.green,glcm.blue)
+          ptsa<-raster::extract(imgr2,pt,sp=T)
+          ptsa@data$x<-ptsa@coords[,1]
+          ptsa@data$y<-ptsa@coords[,2]
+          ptsa@data$type<-labsi$type
+          ptsa@data$imname<-ims[i]
+          ptsa_data<-ptsa@data
+          colnames(ptsa_data)<-c("R","G","B","rgbvi","gli","vari","ngrdi",
+                                 "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
+                                 "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
+                                 "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean",
+                                 "x","y","type","imname")
+   # stack all extracted features values in a file for each df-ws combination and save it as a csv file
         if(i==1){totsampled<-ptsa_data}else{totsampled<-rbind(totsampled,ptsa_data)}
       }
-    write.csv(totsampled,file = paste0("your/folder/path/Phase_2_df_ws_ext_feat/Phase2_df",
+    write.csv(totsampled,file = paste0("./Phase_2_df_ws_ext_feat/Phase2_df",
                                        as.character(df),"_ws",as.character(ws),".csv"))
   }
-```Phase
+```
+
+# 2.2 Model comparison
+Here, we tested the influence of window size and downscaling factor on classification accuracy.
+We randomly assigned pixels from 70% of the images for training, and 30% for validation for each DF-WS combination, then we trained a random forest (RF) classifier using the “randomForest” function of the “randomForest” package (Liaw & Wiener, 2002). Accuracies were reported and saves as .csv file. 
+The metric to calculate the accuracy of the RF classifiers was the mean F1 score of the five classes. The F1 score is derived from precision and recall metrics. The precision is intuitively the ability of the classifier not to label a sampled pixel as positive when it is negative, whereas the recall is the ability of the classifier to find all the positive sampled pixels. Metrics equations are reported in the main text. 
+```r
+library(randomForest)
+library(crfsuite)
+library(bigstatsr)
+library(readr)
+library(dplyr)
+library(raster)
+rm(list=ls())
+
+setwd(maindir<-"your/folder/path")
+files<-list.files(path="./Phase_2_df_ws_ext_feat/", pattern="Phase2")
+res<-data.frame(f1_mean=c(rep(NA,length(files))),
+                df=c(rep(NA,length(files))),
+                ws=c(rep(NA,length(files))))
+
+for (i in 1:length(files) ){
+  print(files[i])
+
+  # Load the dataset and replace VARI infinite values
+    data<-NA
+    data<-read.csv(stringsAsFactors=T,paste0("./Phase_2_df_ws_ext_feat/",files[i]),row.names=1)
+    data$vari<-as.numeric(data$vari)
+    data$vari[is.na(data$vari)]<-0
+    data$vari[data$vari==Inf]<-max(data$vari[is.finite(data$vari)])
+    data$vari[data$vari==-Inf]<-min(data$vari[is.finite(data$vari)])
+
+  # Split the dataset into training and validation so that points of the same image are in the same subset.
+    set.seed(1409)
+    train_index<- sample(seq(1,length(unique(data$imname))),round(length(unique(data$imname))*0.7))
+    imgst<-unique(data$imname)[train_index]
+    data$tv<-NULL #We create a new column that labels each observation as either "training" or "validation" based on the subdataset to which it has been assigned.
+    train<-data[is.element(data$imname,imgst),c("tv")]<-"t"
+    valid<-data[!is.element(data$imname,imgst),c("tv")]<-"v"
+    train<-data[data$tv=="t",]
+    valid<-data[data$tv=="v",]
+    summary(train$type); summary(valid$type)
+
+  # Build the classifier
+    set.seed(1509)  # Setting seed
+    classifier_RF = randomForest(x = train[,c(1:28)],
+                               y = as.factor(train$type),
+                               ntree = 500,proximity=T)
+    pred_rf = predict(classifier_RF, newdata = valid)
+
+  # Calculate its accuracy and report it in the results dataframe
+    print(crf_evaluation(pred_rf, valid$type))
+    print(table(pred_rf, valid$type))
+    res$f1_mean[i]<-crf_evaluation(pred_rf, valid$type)[["overall"]][["f1_mean"]]
+    res$df[i]<-parse_number(substr(files[i],10,11))
+    res$ws[i]<-parse_number(substr(files[i],14,15))
+}
+# Write the results dataframe as a csv file
+write.csv(res,file="./Phase_2_dfws_accuracy.csv")
+```
