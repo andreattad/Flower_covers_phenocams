@@ -3,7 +3,7 @@ by D.Andreatta, C. Bachofen, M. Dalponte, V. Klaus, N.Buchmann.
 Submitted to Remote Sensing of Environment. 
 Contact information: davide.andreatta@phd.unipd.it.
 
-In this tutorial single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany) you will extracted. 
+In this tutorial single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany) were extracted. 
 The code is developed in R version 4.3.0 (2023-04-21 ucrt).
 
 <figure>
