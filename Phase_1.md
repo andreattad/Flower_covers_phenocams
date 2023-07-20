@@ -1,7 +1,7 @@
 # 1.1 Brightness and contrast extraction
 
 Light conditions heavily affect pixel colours: images with high brightness were usually foggy, and images with high contrast were usually acquired in direct sunlight conditions. We calculated brightness and contrast for all images using the “extractVIs” function of the R package “Phenopix” (Filippa et al., 2016) and tested which brightness and contrast combinations allow the selection of images acquired in homogeneous light conditions.
-Directory structure in the "your/path/folder/ROISREFS_2014" is compatible with the one required in phenopix, a very commonly used package for phenocam images processing. The extraction of each time-series required around 20 minutes.
+Directory structure in the "your/path/folder/ROISREFS" is compatible with the one required in phenopix, a very commonly used package for phenocam images processing. The extraction of each time-series required around 20 minutes.
 
 In this script, our aim is to extract brightness average and contrast for each image.
 
@@ -20,9 +20,9 @@ plotIDs<-c( "001","002","003","005","007","008","009","010","011","013","016","0
 time0.all <- proc.time()[3]
 for (plot in plotIDs) {
   time0 <- proc.time()[3]
-  path.JPG <- paste("./IMGS_2014/", plot"/", sep="")
-  path.ROI <- paste("./ROISREFS_2014/", plot, "/ROI/", sep="")
-  path.VI <- paste("./ROISREFS_2014/", plot, "/VI/", sep="")
+  path.JPG <- paste("./IMGS/", plot"/", sep="")
+  path.ROI <- paste("./ROISREFS/", plot, "/ROI/", sep="")
+  path.VI <- paste("./ROISREFS/", plot, "/VI/", sep="")
   extracted<-extractVIs(path.JPG, path.ROI, vi.path=path.VI,plot=F, spatial=F, date.code="yyyymmddHHMM")
   duration <- proc.time()[3]-time0;
   print(duration)
@@ -30,9 +30,9 @@ for (plot in plotIDs) {
 
 # Convert from Rdata format to csv format and save all them in the same folder
 for (plot in plotIDs) {
-  load(paste0("./ROISREFS_2014/", plot, "/VI/VI.data.Rdata"))
-  path.csv <- "./Phase_1_2014_raw_indices/"
-  write.csv(VI.data$roi1,file=paste0(path.csv,"VI_raw2014_", plot,".csv"))
+  load(paste0("./ROISREFS/", plot, "/VI/VI.data.Rdata"))
+  path.csv <- "./Phase_1_raw_indices/"
+  write.csv(VI.data$roi1,file=paste0(path.csv,"VI_raw_", plot,".csv"))
 }
 ```
 # 1.2 Images selection based on brightness and contrast
@@ -47,7 +47,7 @@ perc<-c(0.1,0.4)    #Images with uniform light conditions
 
 for (plot in 1:plotIDs){
    # Load the dataframe with brightness and contrast information 
-   dataraw<- read.csv(paste0("./Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),
+   dataraw<- read.csv(paste0("./Phase_1_raw_indices/VI_raw_", plot,".csv"),
                       encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
    doys<-doys[doys>start&doys<end]
@@ -99,7 +99,7 @@ for (plot in 1:plotIDs){
                                               substr(dataraw$date,12,13),#hour
                                               substr(dataraw$date,15,16),".jpg")#minute
                dataraw<-dataraw[dataraw$doy>start&dataraw$doy<end,]
-               write.csv(dataraw,file = paste("./Phase_1_2014_filtered_indices_BRI_CON/rawdatafilt",plot,".csv",sep=""))
+               write.csv(dataraw,file = paste("./Phase_1_filtered_indices_BRI_CON/rawdatafilt",plot,".csv",sep=""))
 }
 
 ```
@@ -115,10 +115,10 @@ library(stringr)
 setwd("your/folder/path")
 
 # Create a list of all the filtered images
-csv_name_list<-list.files(path="./Phase_1_2014_filtered_indices_BRI_CON/",pattern="rawdatafilt")
+csv_name_list<-list.files(path="./Phase_1_filtered_indices_BRI_CON/",pattern="rawdatafilt")
 combined.df <- do.call(rbind , lapply(csv_name_list, read.csv, row.names = 1))
 combined.df_sel<-combined.df[combined.df$selBRICON==T,]
-combined.df_sel$imlistpath<-paste0(maindir,"IMGS_2014/",
+combined.df_sel$imlistpath<-paste0(maindir,"IMGS/",
                         substr(combined.df_sel$imname,8,10),"/",combined.df_sel$imname)
 write.csv(combined.df_sel,file="./Phase_1_selected_images.csv")
 
