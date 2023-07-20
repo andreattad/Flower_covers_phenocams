@@ -4,6 +4,9 @@ Submitted to Remote Sensing of Environment.
 Contact information: davide.andreatta@phd.unipd.it.
 
 In this tutorial single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany) were extracted. 
+
+To ensure that the results of the manuscript can be easily replicated, we decided to base our tutorial on the provided case study and provide code that can be immediately applied to the supplementary materials, including images, labels, and regions of interest, which will be made available on the ETH repository (link to be provided after acceptance). Although the presented workflow is tailored to the specific case study, it can be adapted for use with different case studies with minor modifications. To apply the workflow to new case studies, adjustments should be made to plot IDs, to the period of interest, and to flower class names.
+
 The code is developed in R version 4.3.0 (2023-04-21 ucrt).
 
 <figure>
@@ -42,8 +45,8 @@ materials include: Images, Region of interests and labels.
 
 ```
 setwd("your/folder/path")
-dir.create("Phase_1_2014_raw_indices")
-dir.create("Phase_1_2014_filtered_indices_BRI_CON")
+dir.create("Phase_1_raw_indices")
+dir.create("Phase_1_filtered_indices_BRI_CON")
 dir.create("Phase_1_lab_xy")
 dir.create("Phase_2_df_ws_ext_feat")
 dir.create("Phase_3_RF_classifiers")
