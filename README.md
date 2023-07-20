@@ -35,7 +35,7 @@ Moreover, [here](image_classification.md) we provide the code to classify all th
 # To get ready for the tutorial:
 
 ## 1. Download the materials:
-the materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE
+The materials can be downloaded at the link: LINK TO ETH REPOSITORY HERE (will be made available after acceptance)
 materials include: Images, Region of interests and labels.
 
 ## 2. Set up the working environment. 
