@@ -15,28 +15,28 @@ setwd(maindir<-"your/folder/path")
 
 # 1 Load the labelled pixels dataset
   labs<-read.csv(row.names=1,"./Phase_1_labelled.csv",stringsAsFactors = T)
-  ims<-unique(labs$im)
+  imgs<-unique(labs$im)
 
 # 2 Define df-ws combinations and extract the image features in the labelled pixel 
   dfs<-c("08","04","02","01")
-  wss<-c("03","05","07","11","19","27","43")
-  combi0<-data.frame(dfs=as.numeric(sort(rep(dfs,length(wss)))),wss=as.numeric(rep(wss,length(dfs))))
-  combi0$product<-combi0$dfs*combi0$wss
-  combi<-combi0[combi0$product<104,]
+  wss<-c("43","27","19","11","07","05","03")
+  combinations<-data.frame(dfs=as.numeric(sort(rep(dfs,length(wss)))),wss=as.numeric(rep(wss,length(dfs))))
+  combinations$product<-combinations$dfs*combinations$wss
+  combinations<-combinations[combinations$product<104,]
   
-  for(f in 1:nrow(combi)){
-    df<-combi$dfs[f];df
-    ws<-combi$wss[f];ws
+  for(f in 1:nrow(combinations)){
+    df<-combinations$dfs[f];df
+    ws<-combinations$wss[f];ws
     
-      for (i in 1: length(ims)){
+      for (imgname in imgs){
 
         # Load the image and aggregate it
-          img0<-brick(as.character(ims[i]))
-          img<-crop(img0,extent(0,1280,16,1040)) #16 rows at the bottom of the pictures contain the timestamps.
+          img<-brick(as.character(imgname))
+          img<-crop(img,extent(0,1280,16,1040)) #16 rows at the bottom of the pictures contain the timestamps.
           imgr <- terra::aggregate(img,fact=df)
 
         # Load the points and define the minimum extent required to compute points features
-          labsi<-labs[labs$im==ims[i],]
+          labsi<-labs[labs$im==imgname,]
           pt<- SpatialPoints(coords =labsi[,c("x","y")])
           cellnum<-raster::extract(imgr,pt,sp=T,cellnumbers=T)@data[["cells"]]
           rown<-rowColFromCell(imgr, cellnum)[,1]
@@ -48,7 +48,7 @@ setwd(maindir<-"your/folder/path")
           new.extent<-extent(xmin,xmax,ymin,ymax)
           cropped<-crop(imgr,new.extent)
 
-        # compute the image features
+        # Compute the image features
           cropped[[4]]<-((cropped[[2]]*cropped[[2]])-(cropped[[1]]*cropped[[3]]))/
                         ((cropped[[2]]*cropped[[2]])+(cropped[[1]]*cropped[[3]]))#RGBVI
           cropped[[5]]<-((2*cropped[[2]])-cropped[[1]]-cropped[[3]])/
@@ -75,19 +75,19 @@ setwd(maindir<-"your/folder/path")
                                            "dissimilarity", "second_moment","mean"))
 
         # Stack the features, extract their values at labelled pixels
-          imgr2<-stack(cropped,glcm.red,glcm.green,glcm.blue)
-          ptsa<-raster::extract(imgr2,pt,sp=T)
+          imgrs<-stack(cropped,glcm.red,glcm.green,glcm.blue)
+          ptsa<-raster::extract(imgrs,pt,sp=T)
           ptsa@data$x<-ptsa@coords[,1]
           ptsa@data$y<-ptsa@coords[,2]
           ptsa@data$type<-labsi$type
-          ptsa@data$imname<-ims[i]
+          ptsa@data$imname<-imgname
           ptsa_data<-ptsa@data
           colnames(ptsa_data)<-c("R","G","B","rgbvi","gli","vari","ngrdi",
                "Rvariance","Rhomogeneity","Rcontrast","Rentropy","Rdissimilarity","Rsecond_moment","Rmean",
                "Gvariance","Ghomogeneity","Gcontrast","Gentropy","Gdissimilarity","Gsecond_moment","Gmean",
                "Bvariance","Bhomogeneity","Bcontrast","Bentropy","Bdissimilarity","Bsecond_moment","Bmean",
                "x","y","type","imname")
-   # stack all extracted features values in a file for each df-ws combination and save it as a csv file
+   # Stack all extracted features values in a file for each df-ws combination and save it as a csv file
         if(i==1){totsampled<-ptsa_data}else{totsampled<-rbind(totsampled,ptsa_data)}
       }
     write.csv(totsampled,file = paste0("./Phase_2_df_ws_ext_feat/Phase2_df",
