@@ -147,7 +147,7 @@ library(crfsuite)
 setwd(maindir<-"your/folder/path")
 
 summary<-read.csv("./Phase_3_RF_classifiers_accuracies.csv",row.names=1)
-summary$durations<-c(NA,NA,NA,NA,NA)
+summary$durations<-NA
 
 df<-4
 ws<-11
