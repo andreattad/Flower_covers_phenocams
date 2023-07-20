@@ -30,7 +30,7 @@ df=4
 for (imgn in pathimlist){
    img<-brick(imgn)
    imgr <- terra::aggregate(img, df)
-   #NB: here compute only the "best Bands selected in SFFS" in our case:
+   #NB: Here compute only the "best Bands selected in SFFS" in our case:
    #    rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment
       imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
       imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
