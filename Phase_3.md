@@ -1,4 +1,4 @@
-# 3.1 Feature selection and models comparison
+# 3.1 Feature selection and model comparison
 We selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. 
 First, we randomly assigned 70% of images for training, and 30% of images for validation. Then, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
 
