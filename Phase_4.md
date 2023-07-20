@@ -29,7 +29,7 @@ library(terra)
       for (i in 1:length(imlist)){
           # Compute image features
             img<-brick(imlist[i])
-            load(paste("./ROISREFS_2014/",plot,"/ROI/roi.data.Rdata",sep=""))          
+            load(paste("./ROISREFS/",plot,"/ROI/roi.data.Rdata",sep=""))          
             imgr <- terra::aggregate(img, df)
             #NB: here compute only the "best Bands selected in SFFS" in our case:
             # rgbvi,gli,vari,ngrdi, R_second_moment, B_contrast, B_entropy and B_second_moment.
