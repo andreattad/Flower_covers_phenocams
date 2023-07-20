@@ -21,7 +21,7 @@ The proposed workflow can be divided in four phases:
      -    2.1 feature values extraction
      -    2.2 model comparison
 3. [feature selection and final classifier compilation](Phase_3.md)
-     -    3.1 feature selection and models comparison
+     -    3.1 feature selection and model comparison
      -    3.2 processing time calculation
 4. [FCTS extraction, smoothing and calculation of phenological metrics.](Phase_4.md)
      -    4.1 FCTS extraction
@@ -454,7 +454,7 @@ for (i in 1:length(files) ){
 # Write the results dataframe as a csv file
 write.csv(res,file="./Phase_2_dfws_accuracy.csv")
 ```
-# 3.1 Feature selection and models comparison
+# 3.1 Feature selection and model comparison
 We selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. 
 First, we randomly assigned 70% of images for training, and 30% of images for validation. Then, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
 
