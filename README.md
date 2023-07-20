@@ -23,10 +23,10 @@ The proposed workflow can be divided in four phases:
 3. [feature selection and final classifier compilation](Phase_3.md)
      -    3.1 feature selection and model comparison
      -    3.2 processing time calculation
-4. [FCTS extraction, smoothing and calculation of phenological metrics.](Phase_4.md)
+4. [FCTS extraction and smoothing and phenological metrics identification.](Phase_4.md)
      -    4.1 FCTS extraction
      -    4.2 FCTS smoothing and display
-     -    4.3 Phenological metric extraction
+     -    4.3 Phenological metric identification
   
 Moreover, [here](image_classification.md) we provide the code to classify all the images in a plot
 ![Example of RGB and classified image from Figure 5 in the manuscript](https://drive.google.com/uc?id=1NVcvDAzGoqVIJ4gtlL2xgXSbHAvd22ZY)  
