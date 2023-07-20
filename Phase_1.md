@@ -46,6 +46,7 @@ end=150             #End of the season of interest (doy)
 perc<-c(0.1,0.4)    #Images with uniform light conditions
 
 for (plot in 1:plotIDs){
+   # Load the dataframe with brightness and contrast information 
    dataraw<- read.csv(paste0("./Phase_1_2014_raw_indices/VI_raw2014_", plot,".csv"),
                       encoding="UTF-8",row.names=1 )
    doys<-unique(dataraw$doy)
