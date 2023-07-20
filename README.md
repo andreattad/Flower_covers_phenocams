@@ -21,7 +21,7 @@ The proposed workflow can be divided in four phases:
      -    2.1 feature values extraction
      -    2.2 model comparison
 3. [feature selection and final classifier compilation](Phase_3.md)
-     -    3.1 feature selection and models comparison
+     -    3.1 feature selection and model comparison
      -    3.2 processing time calculation
 4. [FCTS extraction, smoothing and calculation of phenological metrics.](Phase_4.md)
      -    4.1 FCTS extraction
