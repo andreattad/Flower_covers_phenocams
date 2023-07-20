@@ -151,7 +151,7 @@ summary$durations<-NA
 
 df<-4
 ws<-11
-load(paste("./ROISREFS_2014/A/010/ROI/roi.data.Rdata",sep=""))
+load(paste("./ROISREFS/010/ROI/roi.data.Rdata",sep=""))
 
 
 #------------------------------------------------------------
@@ -160,7 +160,7 @@ load(paste("./ROISREFS_2014/A/010/ROI/roi.data.Rdata",sep=""))
   classifier_RF<-imgr<-imgm<-glcm.red<-glcm.green<-glcm.blue<-classified<-duration<-bestBands<-NULL
   classifier_RF<-readRDS("./Phase_3_RF_classifiers/RF_all.rds")
   time0 <- proc.time()[3]
-    imgr<-brick("./IMGS_2014/010/SiteJEA010_201404121334.jpg")
+    imgr<-brick("./IMGS/010/SiteJEA010_201404121334.jpg")
     imgr <- terra::aggregate(imgr, df)
     imgr[[4]]<-((imgr[[2]]*imgr[[2]])-(imgr[[1]]*imgr[[3]]))/((imgr[[2]]*imgr[[2]])+(imgr[[1]]*imgr[[3]]))#RGBVI
     imgr[[5]]<-((2*imgr[[2]])-imgr[[1]]-imgr[[3]])/((2*imgr[[2]])+imgr[[1]]+imgr[[3]])#GLI
