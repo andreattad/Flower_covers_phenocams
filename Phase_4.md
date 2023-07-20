@@ -79,7 +79,7 @@ library(terra)
 
 
 # 4.2 FCTS smoothing
-We identified and removed outliers from the derived flower cover time series using the “tsclean” function of the “forecast” R package which is based on Friedman's SuperSmoother for non-seasonal series (Hyndman & Khandakar, 2008). Values were aggregated at daily temporal resolution by averaging. A local polynomial regression function was fitted to smooth the time series using the “loess” function of the “stats” package (R Core Team, 2023).
+We identified and removed outliers from the derived flower cover time series using the “tsclean” function of the “forecast” R package which is based on Friedman's SuperSmoother for non-seasonal series (Hyndman & Khandakar, 2008). Values were aggregated at daily temporal resolution by by taking the arithmetic mean. A local polynomial regression function was fitted to smooth the time series using the “loess” function of the “stats” package (R Core Team, 2023).
 
 ```r
 library(ggplot2)
@@ -93,13 +93,13 @@ classes<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower","Gree
 # Loop over each plot 
 for (i in 1:length(list)){
 
-  # LOAD THE TIME_SERIES and REMOVE OUTLIERS
+  # Load the time-series
   plot<-substr(list[1],nchar(list[1])-6,nchar(list[1])-4)
   ts<-read.csv(list[i],stringsAsFactors = F)
   ts[is.na(ts)]<-0  #NA was assigned during classification to classes with zero pixels
   tszo<-read.zoo(ts[,c("date",classes)],tryFormats= c("%d/%m/%Y %H:%M","%Y-%m-%d %H:%M"))
   
-   # remove outliers in each class
+   # Remove outliers in each class
      tot_df<-NULL
      for(c in 1:length(classes)){
             class<-classes[c]
@@ -111,10 +111,10 @@ for (i in 1:length(list)){
      }
      tot_df$date<-as.Date(tot_df$Index)
   
-   # aggregate to daily resolution
+   # Aggregate to daily resolution
      tot_daily<-tot_df%>%group_by(date,class) %>%summarise_at(vars("FPe"), mean)
      
-   # add fitted values and standard error
+   # Add fitted values and standard error
      fitted_df<-NULL
      for(class in classes){
         temp_df<-NULL
@@ -127,14 +127,14 @@ for (i in 1:length(list)){
      fitted_df$plot<-plot
      if(!exists("fall")){fall<-fitted_df}else{fall<-rbind(fitted_df,fall)}
 }
-   #Compute lower and upper confidence interval from fitted and standard error
+   # Compute lower and upper confidence interval from fitted and standard error
       fall$lower<-fall$fit-qt(0.975,fall$df)*fall$se.fit
       fall$upper<-fall$fit+qt(0.975,fall$df)*fall$se.fit
 
 write.csv(fall,file="./Phase_4_fitted_flower_cover_long_with_SE.csv")
 ```
 # 4.3 Phenological metric identification
-For each FCTS, onset, peak and end of flowering were extracted. The peak was identified as the day of maximum in the FCTS. Onset of flowering was identified as the first day above the 10th percentile of the cumulative flower cover until peak, whereas the end of the season was identified as the first day above the 90th percentile of the cumulative flower cover after the peak, as explained in Figure 3. In our case study it was not possible to extract all the metrics from all FCTS, since in a few cases flowering started before the start of observations (i.e. spring weeding), and in many cases the peak and the end of flowering were not observed because mowing interrupted grassland development. Therefore, we limited the flowering metrics extraction: the onset was extracted in FCTS having flower cover at the first observation day lower than one third of the maximum flower cover, end of the season in FCTS having flower cover at the last observation day lower than one third of the maximum flower cover, all metrics were extracted only in FCTS with peak after first observation day and before last observation day and flower cover at peak higher than 1%.
+For each FCTS, onset, peak and end of flowering were extracted. The peak was identified as the day of maximum in the FCTS, where the value was higher than the values before and after it. The onset of flowering was identified on the basis of the rescaled cumulative sum of daily flower covers before the peak, whereas the end of flowering was identified on the basis of the rescaled cumulative sum of daily flower covers after the peak. This allowed the identification of flowering onset in FCTS when the end of the flowering was not observable (e.g., because of mowing) and the identification of the end of flowering in FCTS when the onset of flowering was not observable (e.g. image acquisition started later). The cumulative sums were scaled so that they ranged from 0 to 1. Onset was defined as the first day above 0.1 of the rescaled cumulative sum of daily flower covers before the peak, whereas the end of the season was identified as the first day above 0.9 of the rescaled cumulative sum of daily flower covers after the peak, as explained in Figure 3. The onset and the end of flowering were defined only in FCTS having a low flower cover (i.e., <1%) at the start and at the end of the observation period, respectively. All metrics were extracted only from time series where the peak was higher than 1%.
 
 <figure>
 <img src="https://drive.google.com/uc?id=1mPElue8oWmRnwIJ7BoIU2FAmIIoRke4z" width="600">
@@ -149,7 +149,7 @@ classes_flowers<-classes[1:4]
 
 # Upload all the fitted flower covers
 fall<-read.csv(stringsAsFactors=T,file="./Phase_4_fitted_flower_cover_long_with_SE.csv",row.names=1)
-fall$date<-as.Date(fall0$date)
+fall$date<-as.Date(fall$date)
 # keep only FCTS of flowers (remove "Green vegetation" and "Soil" covers)
 fall<-fall[fall$class %in% classes_flowers,]
 
