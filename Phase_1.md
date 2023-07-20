@@ -105,7 +105,7 @@ for (plot in 1:plotIDs){
 ```
 
 # 1.3 Image labelling
-Image labelling phase includes: i) preparation of the list of images to be labelled, ii) label the images, iii) remove labelled pixels which are too close from one another. The labelled dataset is provided in the ETH repository (see README file for details) for replicability.
+Image labelling phase includes: i) image list preparation, ii) image patches labelling, iii) close pixels removal. The labelled dataset is provided in the ETH repository (see README file for details) for replicability.
 
 ## Image list preparation
 To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
@@ -148,7 +148,7 @@ file.copy(list3periods_shuffled,
 write.csv(list3periods_shuffled,file = "./Phase_1_imgslist300.csv")
 
 ```
-## Image patches  labelling
+## Image patches labelling
 For each image, a 200 pixels × 200 pixels image patch was randomly selected and plotted in RGB colours using the “plotRGB()” function of the “raster” package (Hijmans, 2022). Around 30 pixels per image were labelled by clicking on the image to retrieve the x and y coordinates using the “locator()” function of the “graphics” package and assigning to each pixel the class to which it belongs (see subsection 2.1). 
 
 ```r
