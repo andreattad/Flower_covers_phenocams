@@ -987,7 +987,7 @@ setwd("your/folder/path/")
 # and create a folder where the classified images will be stored
 rf <- readRDS("./Phase_3_RF_classifiers/RF_selected.rds")
 plot<-"056"
-dir<-paste0("./Phase_4_Classified_images_various/",plot)
+dir<-paste0("./Phase_4_Classified_images/",plot)
 dir.create(dir)
 
 # Read the CSV containing the selected images IDs based on brightness and contrast
