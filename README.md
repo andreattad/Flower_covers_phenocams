@@ -13,7 +13,7 @@ The code is developed in R version 4.3.0 (2023-04-21 ucrt).
 <img src="https://drive.google.com/uc?id=1z9yc0Tht4S425txHhc42OpQdz4N7g6I6" width="800">
 </figure>
 
-_Structure of the proposed workflow (Figure 2 in the manuscript)_
+_Structure of the proposed workflow (Figure 2 in the manuscript). Abbreviations are as follows: RF = Random Forest; SFFS = Sequential Floating Forward Selection; FCTS = Flower Cover Time Series._
 
 The proposed workflow can be divided in four phases: 
 1. [image selection and pixel labelling](Phase_1.md)
