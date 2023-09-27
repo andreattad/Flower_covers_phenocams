@@ -79,7 +79,7 @@ library(terra)
 
 
 # 4.2 FCTS smoothing
-We identified and removed outliers from the derived flower cover time series using the “tsclean” function of the “forecast” R package which is based on Friedman's SuperSmoother for non-seasonal series (Hyndman & Khandakar, 2008). Values were aggregated at daily temporal resolution by by taking the arithmetic mean. A local polynomial regression function was fitted to smooth the time series using the “loess” function of the “stats” package (R Core Team, 2023).
+We identified and removed outliers from the derived flower cover time series using the “tsclean” function of the “forecast” R package which is based on Friedman's SuperSmoother for non-seasonal series (Hyndman & Khandakar, 2008). Values were aggregated at daily temporal resolution by taking the arithmetic mean. A local polynomial regression function was fitted to smooth the time series using the “loess” function of the “stats” package (R Core Team, 2023).
 
 ```r
 library(ggplot2)
@@ -134,18 +134,18 @@ for (i in 1:length(list)){
 write.csv(fall,file="./Phase_4_fitted_flower_cover_long_with_SE.csv")
 ```
 # 4.3 Phenological metric identification
-For each FCTS, onset, peak and end of flowering were extracted. The peak was identified as the day of maximum in the FCTS, where the value was higher than the values before and after it. The onset of flowering was identified on the basis of the rescaled cumulative sum of daily flower covers before the peak, whereas the end of flowering was identified on the basis of the rescaled cumulative sum of daily flower covers after the peak. This allowed the identification of flowering onset in FCTS when the end of the flowering was not observable (e.g., because of mowing) and the identification of the end of flowering in FCTS when the onset of flowering was not observable (e.g. image acquisition started later). The cumulative sums were scaled so that they ranged from 0 to 1. Onset was defined as the first day above 0.1 of the rescaled cumulative sum of daily flower covers before the peak, whereas the end of the season was identified as the first day above 0.9 of the rescaled cumulative sum of daily flower covers after the peak, as explained in Figure 3. The onset and the end of flowering were defined only in FCTS having a low flower cover (i.e., <1%) at the start and at the end of the observation period, respectively. All metrics were extracted only from time series where the peak was higher than 1%.
+For each FCTS, onset, peak, and end of flowering were extracted. The peak was identified as the day of maximum in the FCTS, when the value was higher than the values before and after it. The onset of flowering was identified on the basis of the normalised cumulative sum of daily flower covers before the peak, whereas the end of flowering was identified on the basis of the normalised cumulative sum of daily flower covers after the peak. This allowed the identification of flowering onset in FCTS when the end of the flowering was not observable (e.g., because of mowing) as well as the identification of the end of flowering in FCTS when the onset of flowering was not observable (e.g. image acquisition started later). The cumulative sums were min-max normalised (0% – 100%), and the onset was defined as the first day when the normalised cumulative sum of daily flower cover exceeded 10%. Moreover, the end of the season was identified as the first day when the normalised cumulative sum of daily flower cover after the peak exceeds 90%. The 10% and 90% thresholds were chosen as a compromise between robustness against outliers and timely identification of changes. The onset of flowering was determined exclusively for FCTS exhibiting a low flower cover (< 1%) at the start of the observation period to avoid errors in plots for which the observation period started after the onset of flowering. Similarly, the end of flowering was defined exclusively for FCTS with a low flower cover (< 1%) at the end of the observation period to prevent the mischaracterization of the end of flowering in plots for which the observation period ended prior to the end of flowering. We expected a flower cover of unsown species above 0% due to wrongly classified pixels and therefore did not extract phenological metrics from time series for which the peak of the sown species was lower than 1% to avoid potential misclassification. The phenological metrics of single species that were calculated with this approach can easily be compared between treatments (i.e., multiple image time-series), and summary statistics can be derived from multiple plots, such as mean and standard deviation as well as further statistical analyses.
 
 <figure>
-<img src="https://drive.google.com/uc?id=1mPElue8oWmRnwIJ7BoIU2FAmIIoRke4z" width="600">
+<img src="https://drive.google.com/uc?id=13u5IimWhcAq0jXqh-bg8_EgF95D4QT49" width="600">
 </figure>
-            
-_Flowering phenological metrics identification (Figure 4 in the manuscript)_
+ 
+_Flowering phenological metrics identification (Figure 3 in the manuscript)_
 ```r
 library(dplyr)
 setwd("your/folder/path")
-classes<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower","Green_vegetation","Soil")
-classes_flowers<-classes[1:4]
+classes_flower<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower")
+
 
 # Upload all the fitted flower covers
 fall<-read.csv(stringsAsFactors=T,file="./Phase_4_fitted_flower_cover_long_with_SE.csv",row.names=1)
