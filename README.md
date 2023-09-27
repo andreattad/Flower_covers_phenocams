@@ -3,6 +3,15 @@ by D.Andreatta, C. Bachofen, M. Dalponte, V. Klaus, N.Buchmann.
 Submitted to Remote Sensing of Environment. 
 Contact information: davide.andreatta@phd.unipd.it.
 
+<figure>
+<img src="https://drive.google.com/uc?id=1ByJcwP-dgLWCyJVBRwHEPDjsj_EQEqUw" width="800">
+</figure>
+
+_Example of RBG images, classified images and flower cover time-series_
+
+
+
+
 In this tutorial single species flowering phenology time-series and phenological metrics from time-lapse camera images of grasslands captured at the Jena trait-based experiment (Germany) were extracted. 
 
 To ensure that the results of the manuscript can be easily replicated, we decided to base our tutorial on the provided case study and provide code that can be immediately applied to the supplementary materials, including images, labels, and regions of interest, which will be made available on the ETH repository (link to be provided after acceptance). Although the presented workflow is tailored to the specific case study, it can be adapted for use with different case studies with minor modifications. To apply the workflow to new case studies, adjustments should be made to plot IDs, to the period of interest, and to flower class names.
