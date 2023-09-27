@@ -108,7 +108,7 @@ for (plot in 1:plotIDs){
 Image labelling phase includes: i) image list preparation, ii) image patches labelling, iii) close pixels removal. The labelled dataset is provided in the ETH repository (see README file for details) for replicability.
 
 ## Image list preparation
-To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr, 24 and May, 5; 60 images between May, 6 and May, 18; 120 images between May, 19 and May, 29). 
+To develop a labelled dataset, 300 images were randomly selected (60 images in the period between Apr 24 and May 5; 60 images between May 6 and May 18; 120 images between May 19 and May 29, 2014). 
 ```r
 library(stringr)
 
