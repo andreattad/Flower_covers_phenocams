@@ -1,6 +1,6 @@
 # **Tutorial for the manuscript "Extracting flowering phenology from grassland species mixtures using time-lapse cameras"**
 by D.Andreatta, C. Bachofen, M. Dalponte, V. Klaus, N.Buchmann.   
-Submitted to Remote Sensing of Environment. 
+Published in Remote Sensing of Environment DOI: https://doi.org/10.1016/j.rse.2023.113835. 
 Contact information: davide.andreatta@phd.unipd.it.
 
 <figure>
