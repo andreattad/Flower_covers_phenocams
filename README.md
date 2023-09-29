@@ -2,7 +2,7 @@
 by Davide Andreatta, Christoph Bachofen, Michele Dalponte, Valentin H. Klaus, Nina Buchmann.   
 Published in Remote Sensing of Environment    
 DOI: https://doi.org/10.1016/j.rse.2023.113835   
-Contact information: davide.andreatta@phd.unipd.it.   
+Contact information: davide.andreatta@phd.unipd.it.    
 
 <figure>
 <img src="https://drive.google.com/uc?id=1ByJcwP-dgLWCyJVBRwHEPDjsj_EQEqUw" width="800">
