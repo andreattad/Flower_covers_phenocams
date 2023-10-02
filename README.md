@@ -50,6 +50,11 @@ Moreover, [here](image_classification.md) we provide the code to classify all th
 ## 1. Download the materials:
 The materials can be downloaded at the link: https://doi.org/10.3929/ethz-b-000634004     
 Materials include: images, region of interests and labels.
+1) Download in your working directory the 4 zip files available in the ETH REPOSITORY
+2) Create a new folder and name it "path/to/your/working/directory/IMGS"
+3) Unzip the zip folders "IMGS_PLOTS_001_049.zip", "IMGS_PLOTS_051_093.zip", "IMGS_PLOTS_094_138.zip"
+4) Put the content of the unzipped folders in "path/to/your/working/directory/IMGS"
+5) unzip "ROIS_LABELS_COMPOSITION.zip"
 
 ## 2. Set up the working environment. 
 
