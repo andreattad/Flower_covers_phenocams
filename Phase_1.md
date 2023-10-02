@@ -1,13 +1,13 @@
 # 1.1 Brightness and contrast extraction
 
 Light conditions heavily affect pixel colours: images with high brightness were usually foggy, and images with high contrast were usually acquired in direct sunlight conditions. We calculated brightness and contrast for all images using the “extractVIs” function of the R package “Phenopix” (Filippa et al., 2016) and tested which brightness and contrast combinations allow the selection of images acquired in homogeneous light conditions.
-Directory structure in the "your/path/folder/ROISREFS" is compatible with the one required in phenopix, a very commonly used package for phenocam images processing. The extraction of each time-series required around 20 minutes.
+Directory structure in the "path/to/your/working/directory/ROISREFS" is compatible with the one required in phenopix, a very commonly used package for phenocam images processing. The extraction of each time-series required around 20 minutes.
 
 In this script, our aim is to extract brightness average and contrast for each image.
 
 ```r
 library(phenopix)
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 
 plotIDs<-c( "001","002","003","005","007","008","009","010","011","013","016","017","018","021",
 "024","025","026","028","030","035","037","039","040","042","043","044","045","046","048","049",
@@ -39,7 +39,7 @@ for (plot in plotIDs) {
 Images with uniform light conditions were retrieved by selecting brightness and contrast between the 10th and the 40th percentile within a 3-day window. The selection of the best images within this 3-day window avoided including images taken on days with sub-optimal observations (e.g., all foggy/high contrast images).
 
 ```r
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 # Define settings
 start=113           #Start of the season of interest (doy)
 end=150             #End of the season of interest (doy)
@@ -112,7 +112,7 @@ To develop a labelled dataset, 300 images were randomly selected (60 images in t
 ```r
 library(stringr)
 
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 
 # Create a list of all the filtered images
 csv_name_list<-list.files(path="./Phase_1_filtered_indices_BRI_CON/",pattern="rawdatafilt")
@@ -156,7 +156,7 @@ For each image, a 200 pixels × 200 pixels image patch was randomly selected and
 library(raster)
 library(rgdal)
 rm(list=ls());
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 
 # load the image list and create seeds list that you will use to select a random 200X200 detail in the image
 imgslist<-read.csv(file = "./Phase_1_imgslist300.csv",
@@ -209,7 +209,7 @@ To prevent duplicated pixels after downscaling the images, any labelled pixels t
 ```r
 library(raster)
 library(sp)
-maindir<-"your/folder/path/"
+maindir<-"path/to/your/working/directory/"
 setwd(maindir)
 # combine all data frames into a single data frame
 file_paths<-list.files(path="./Phase_1_lab_xy/",full.names=T,pattern=".csv")
