@@ -2,13 +2,13 @@
 We selected a set of best suitable features to optimise processing time, and to reduce redundancy of highly correlated features. 
 First, we randomly assigned 70% of images for training, and 30% of images for validation. Then, we compared the accuracies of RF models trained on different subsets of features from the training dataset, including: i) features selected by SFFS, ii) RGB bands alone, iii) RGB bands combined with vegetation indices, iv) RGB bands combined with texture metrics, and v) all features. 
 
-The classifiers were saved in "your/folder/path/Phase_3_RF_classifiers/" and accuracies were saved in "your/folder/path/Phase_3_RF_classifiers_accuracies.csv"
+The classifiers were saved in "path/to/your/working/directory/Phase_3_RF_classifiers/" and accuracies were saved in "path/to/your/working/directory/Phase_3_RF_classifiers_accuracies.csv"
 
 ```r
 library(randomForest)
 library(crfsuite)
 library(varSel)
-setwd(maindir<-"your/folder/path")
+setwd(maindir<-"path/to/your/working/directory/")
 
 summary<-data.frame(name_test=c("all","rgb","rgb_vi","rgb_tex","sel"),
                     bands_used=c(rep(NA,5)),
