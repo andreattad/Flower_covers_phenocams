@@ -6,7 +6,7 @@ library(randomForest)
 library(glcm)
 library(raster)
 library(terra)
-      setwd("your/folder/path")
+      setwd("path/to/your/working/directory/")
 
 # Define the feature extraction parameter, import the RF classifier, define plot IDs
     rf <- readRDS("./Phase_3_RF_classifiers/RF_selected.rds")
@@ -87,7 +87,7 @@ library(zoo)
 library(forecast)
 library(dplyr)
 
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 list<-list.files(path="./Phase_4_FCTS/",pattern="dataflowers",full.names=T)
 classes<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower","Green_vegetation","Soil")
 # Loop over each plot 
@@ -143,7 +143,7 @@ For each FCTS, onset, peak, and end of flowering were extracted. The peak was id
 _Flowering phenological metrics identification (Figure 3 in the manuscript)_
 ```r
 library(dplyr)
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 classes_flower<-c("Gra_flower","Kna_arv_flower","Leu_vul_flower","Ran_acr_flower")
 
 
