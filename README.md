@@ -59,7 +59,7 @@ Materials include: images, region of interests and labels.
 ## 2. Set up the working environment. 
 
 ```
-setwd("your/folder/path")
+setwd("path/to/your/working/directory/")
 dir.create("Phase_1_raw_indices")
 dir.create("Phase_1_filtered_indices_BRI_CON")
 dir.create("Phase_1_lab_xy")
