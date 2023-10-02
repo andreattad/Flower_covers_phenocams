@@ -11,7 +11,7 @@ library(crfsuite)
 library(raster)
 library(terra)
 library(glcm)
-setwd(maindir<-"your/folder/path")
+setwd(maindir<-"path/to/your/working/directory/")
 
 # 1 Load the labelled pixels dataset
   labs<-read.csv(row.names=1,"./Phase_1_labelled.csv",stringsAsFactors = T)
