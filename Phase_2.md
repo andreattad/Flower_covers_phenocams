@@ -107,7 +107,7 @@ library(dplyr)
 library(raster)
 rm(list=ls())
 
-setwd(maindir<-"your/folder/path")
+setwd(maindir<-"path/to/your/working/directory/")
 files<-list.files(path="./Phase_2_df_ws_ext_feat/", pattern="Phase2")
 res<-data.frame(f1_mean=c(rep(NA,length(files))),
                 df=c(rep(NA,length(files))),
